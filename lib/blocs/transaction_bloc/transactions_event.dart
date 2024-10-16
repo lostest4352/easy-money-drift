@@ -10,36 +10,21 @@ final class TransactionsLoadedEvent extends TransactionsEvent {
 }
 
 final class TransactionsAddEvent extends TransactionsEvent {
-  final TransactionModelIsar transactionModelIsar;
+  final TransactionModelDriftCompanion transactionModelDriftCompanion;
 
-  TransactionsAddEvent({required this.transactionModelIsar});
+  TransactionsAddEvent({required this.transactionModelDriftCompanion});
 }
 
 final class TransactionsEditEvent extends TransactionsEvent {
-  final int selectedTransactionModelId;
-  final int amount;
-  final String dateTime;
-  final String? note;
-  //
-  final String transactionType;
-  final bool isIncome;
-  final int colorsValue;
+  final TransactionModelDriftData transactionModelData;
 
-  TransactionsEditEvent({
-    required this.selectedTransactionModelId,
-    required this.amount,
-    required this.dateTime,
-    required this.note,
-    required this.transactionType,
-    required this.isIncome,
-    required this.colorsValue,
-  });
+  TransactionsEditEvent({required this.transactionModelData});
 }
 
 final class TransactionsDeleteEvent extends TransactionsEvent {
-  final TransactionModelIsar? widgetTransactionModelIsar;
+  final int transactionModelId;
 
   TransactionsDeleteEvent({
-    required this.widgetTransactionModelIsar,
+    required this.transactionModelId,
   });
 }

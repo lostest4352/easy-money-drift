@@ -73,9 +73,23 @@ class AppDatabase extends _$AppDatabase {
     yield* allTransactions;
   }
 
-  Future<int> addTransaction(TransactionModelDriftCompanion entry) async {
+  Future<int> addTransaction(TransactionModelDriftCompanion entry) {
     final addEntry = into(transactionModelDrift).insert(entry);
     return addEntry;
+  }
+
+  Future<int> createOrUpdateTransaction(
+      TransactionModelDriftData transactionModelData) {
+    final updateEntry = into(transactionModelDrift)
+        .insertOnConflictUpdate(transactionModelData);
+    return updateEntry;
+  }
+
+  Future<int> deleteTransaction(int transactionModelId) {
+    final deleteEntry = (delete(transactionModelDrift)
+          ..where((tbl) => tbl.id.equals(transactionModelId)))
+        .go();
+    return deleteEntry;
   }
 
   // Category related

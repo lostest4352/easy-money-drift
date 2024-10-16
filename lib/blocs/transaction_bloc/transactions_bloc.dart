@@ -124,37 +124,15 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
     });
 
     on<TransactionsAddEvent>((event, emit) async {
-      final isar = await isarService.isarDB;
-      isar.writeTxn(() async {
-        await isar.transactionModelIsars.put(event.transactionModelIsar);
-      });
+      appDatabase.addTransaction(event.transactionModelDriftCompanion);
     });
 
     on<TransactionsEditEvent>((event, emit) async {
-      final isar = await isarService.isarDB;
-      final selectedUserModel = await isar.transactionModelIsars
-          .get(event.selectedTransactionModelId);
-      selectedUserModel?.amount = event.amount;
-      selectedUserModel?.dateTime = event.dateTime;
-      selectedUserModel?.note = event.note;
-      //
-      selectedUserModel?.transactionType = event.transactionType;
-      selectedUserModel?.isIncome = event.isIncome;
-      selectedUserModel?.colorsValue = event.colorsValue;
-      //
-      isar.writeTxn(() async {
-        if (selectedUserModel != null) {
-          await isar.transactionModelIsars.put(selectedUserModel);
-        }
-      });
+      appDatabase.createOrUpdateTransaction(event.transactionModelData);
     });
 
     on<TransactionsDeleteEvent>((event, emit) async {
-      final isar = await isarService.isarDB;
-      isar.writeTxn(() async {
-        await isar.transactionModelIsars
-            .delete(event.widgetTransactionModelIsar!.id);
-      });
+      appDatabase.deleteTransaction(event.transactionModelId);
     });
   }
 }
