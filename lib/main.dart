@@ -8,7 +8,6 @@ import 'package:flutter_expense_tracker/blocs/search_cubit/search_cubit.dart';
 import 'package:flutter_expense_tracker/blocs/time_range_cubit/time_range_cubit.dart';
 import 'package:flutter_expense_tracker/blocs/transaction_bloc/transactions_bloc.dart';
 import 'package:flutter_expense_tracker/database/drift_database.dart';
-import 'package:flutter_expense_tracker/database/isar_service.dart';
 import 'package:flutter_expense_tracker/routes/app_routes.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,8 +29,8 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -58,12 +57,12 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) =>
-                CategoryBloc(isarService: context.read<IsarService>())
+                CategoryBloc(appDatabase: context.read<AppDatabase>())
                   ..add(CategoryInitialEvent()),
           ),
           BlocProvider(
             create: (context) {
-              return SearchCubit(isarService: context.read<IsarService>());
+              return SearchCubit(appDatabase: context.read<AppDatabase>());
             },
           ),
         ],

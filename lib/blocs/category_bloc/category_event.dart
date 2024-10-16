@@ -6,7 +6,7 @@ sealed class CategoryEvent {}
 final class CategoryInitialEvent extends CategoryEvent {}
 
 final class CategoryAddEvent extends CategoryEvent {
-  final CategoryModelIsar categoryModelIsars;
+  final CategoryModelDrift categoryModelIsars;
 
   CategoryAddEvent({required this.categoryModelIsars});
 }

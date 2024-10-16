@@ -6,7 +6,7 @@ enum SnackBarStatus {
 }
 
 final class CategoryState with EquatableMixin {
-  final List<CategoryModelIsar>? listOfCategoryData;
+  final List<CategoryModelDriftData>? listOfCategoryData;
   final SnackBarStatus snackBarStatus;
 
   CategoryState({
@@ -15,11 +15,11 @@ final class CategoryState with EquatableMixin {
   });
 
   CategoryState copyWith({
-    List<CategoryModelIsar>? listOfCategoryData,
+    List<CategoryModelDriftData>? listOfCategoryData,
     SnackBarStatus? snackBarStatus,
   }) {
     return CategoryState(
-      listOfCategoryData: listOfCategoryData ?? this.listOfCategoryData,
+      listOfCategoryData: listOfCategoryData,
       snackBarStatus: snackBarStatus ?? this.snackBarStatus,
     );
   }

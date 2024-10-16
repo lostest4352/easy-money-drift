@@ -103,6 +103,26 @@ class AppDatabase extends _$AppDatabase {
     yield* allCategories;
   }
 
+  Future<int> addCategory(CategoryModelDriftCompanion entry) {
+    final addEntry = into(categoryModelDrift).insert(entry);
+    return addEntry;
+  }
+
+  // TODO
+  Future<int> editCategory(CategoryModelDriftData categoryModelDriftData) {
+    final editEntry =
+        into(categoryModelDrift).insertOnConflictUpdate(categoryModelDriftData);
+    return editEntry;
+  }
+
+  // TODO
+  Future<int> deleteCategory(CategoryModel categoryModel) {
+    final deleteEntry = (delete(categoryModelDrift)
+          ..where((tbl) => tbl.categoryModel.equalsValue(categoryModel)))
+        .go();
+    return deleteEntry;
+  }
+
   // TODO may do delete all
 }
 
