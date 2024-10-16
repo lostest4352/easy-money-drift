@@ -12,10 +12,10 @@ class CategoryModifyDialog extends StatefulWidget {
   final bool editMode;
   final CategoryModelIsar? selectedListItem;
   const CategoryModifyDialog({
-    Key? key,
+    super.key,
     required this.editMode,
     this.selectedListItem,
-  }) : super(key: key);
+  });
 
   @override
   State<CategoryModifyDialog> createState() => _CategoryModifyDialogState();
