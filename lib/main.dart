@@ -7,6 +7,7 @@ import 'package:flutter_expense_tracker/blocs/category_bloc/category_bloc.dart';
 import 'package:flutter_expense_tracker/blocs/search_cubit/search_cubit.dart';
 import 'package:flutter_expense_tracker/blocs/time_range_cubit/time_range_cubit.dart';
 import 'package:flutter_expense_tracker/blocs/transaction_bloc/transactions_bloc.dart';
+import 'package:flutter_expense_tracker/database/drift_database.dart';
 import 'package:flutter_expense_tracker/database/isar_service.dart';
 import 'package:flutter_expense_tracker/routes/app_routes.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
       providers: [
         RepositoryProvider(
           create: (context) {
-            return IsarService();
+            return AppDatabase();
           },
         ),
       ],
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) =>
-                TransactionsBloc(isarService: context.read<IsarService>())
+                TransactionsBloc(appDatabase: context.read<AppDatabase>())
                   ..add(TransactionsLoadedEvent(
                       timeRangeState: context.read<TimeRangeCubit>().state)),
           ),

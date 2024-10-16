@@ -2,17 +2,16 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/blocs/time_range_cubit/time_range_cubit.dart';
-import 'package:flutter_expense_tracker/database/isar_classes.dart';
-import 'package:flutter_expense_tracker/database/isar_service.dart';
+import 'package:flutter_expense_tracker/database/drift_database.dart';
 import 'package:flutter_expense_tracker/global_variables/time_range_global_vars.dart';
 
 part 'transactions_event.dart';
 part 'transactions_state.dart';
 
 class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
-  final IsarService isarService;
+  final AppDatabase appDatabase;
 
-  TransactionsBloc({required this.isarService}) : super(TransactionsInitial()) {
+  TransactionsBloc({required this.appDatabase}) : super(TransactionsInitial()) {
     final DateTime currentTimeExact = DateTime.now();
     final DateTime currentTime = DateTime(
       currentTimeExact.year,
@@ -24,7 +23,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
     on<TransactionsLoadedEvent>((event, emit) async {
       // All Time
       if (event.timeRangeState.buttonName == allTime) {
-        final transactionListFromStream = isarService.listenTransactionData();
+        final transactionListFromStream = appDatabase.getTransactionData();
         await emit.forEach(
           transactionListFromStream,
           onData: (data) {
@@ -34,8 +33,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
       }
       // This Month
       if (event.timeRangeState.buttonName == thisMonth) {
-        final transactionListFromStream =
-            isarService.listenTransactionDateRange(
+        final transactionListFromStream = appDatabase.getTransactionDataByDate(
           startTime: DateTime(
             currentTime.year,
             currentTime.month,
@@ -52,8 +50,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
       }
       // Last Month
       if (event.timeRangeState.buttonName == lastMonth) {
-        final transactionListFromStream =
-            isarService.listenTransactionDateRange(
+        final transactionListFromStream = appDatabase.getTransactionDataByDate(
           startTime: DateTime(
             currentTime.year,
             currentTime.month - 1,
@@ -74,8 +71,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
       }
       // Last 3 Months
       if (event.timeRangeState.buttonName == last3Months) {
-        final transactionListFromStream =
-            isarService.listenTransactionDateRange(
+        final transactionListFromStream = appDatabase.getTransactionDataByDate(
           startTime: DateTime(
             currentTime.year,
             currentTime.month - 2,
@@ -92,8 +88,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
       }
       // Last 6 Months
       if (event.timeRangeState.buttonName == last6Months) {
-        final transactionListFromStream =
-            isarService.listenTransactionDateRange(
+        final transactionListFromStream = appDatabase.getTransactionDataByDate(
           startTime: DateTime(
             currentTime.year,
             currentTime.month - 5,
@@ -114,7 +109,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
         if (event.timeRangeState.startTime != null &&
             event.timeRangeState.endTime != null) {
           final transactionListFromStream =
-              isarService.listenTransactionDateRange(
+              appDatabase.getTransactionDataByDate(
             startTime: event.timeRangeState.startTime!,
             endTime: event.timeRangeState.endTime!,
           );

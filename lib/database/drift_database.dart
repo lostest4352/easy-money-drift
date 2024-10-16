@@ -6,6 +6,7 @@ import 'package:drift/native.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_expense_tracker/database/categories.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:drift/extensions/json1.dart';
 
 part 'drift_database.g.dart';
 
@@ -58,8 +59,11 @@ class AppDatabase extends _$AppDatabase {
       {required String keyword}) async* {
     final allTransactions = (select(transactionModelDrift)
           ..where((val) {
-            // may cause issues
-            return val.categoryModel.contains(keyword);
+            // may cause issues. from: https://github.com/simolus3/drift/issues/2734
+            return val.categoryModel
+                .jsonExtract(r"$.transactionType")
+                .equals(keyword);
+            // return val.categoryModel.contains(keyword);
           })
           ..orderBy([
             (transaction) => OrderingTerm(
@@ -67,6 +71,11 @@ class AppDatabase extends _$AppDatabase {
           ]))
         .watch();
     yield* allTransactions;
+  }
+
+  Future<int> addTransaction(TransactionModelDriftCompanion entry) async {
+    final addEntry = into(transactionModelDrift).insert(entry);
+    return addEntry;
   }
 
   // Category related
@@ -80,7 +89,7 @@ class AppDatabase extends _$AppDatabase {
     yield* allCategories;
   }
 
-  // TODO may do delete
+  // TODO may do delete all
 }
 
 //
