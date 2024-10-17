@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_expense_tracker/database/isar_classes.dart';
 import 'package:flutter_expense_tracker/global_variables/time_range_global_vars.dart';
 import 'package:flutter_expense_tracker/pages/home_page/date_custom_select.dart';
 import 'package:flutter_expense_tracker/pages/home_page/date_fixed_range_select.dart';
@@ -195,8 +194,9 @@ class _HomePageState extends State<HomePage> {
               if (state is TransactionsLoadedState) {
                 //
                 final transactionsList = state.listOfTransactionData;
+
                 transactionsList
-                    ?.sort((a, b) => b.dateTime.compareTo(a.dateTime));
+                    ?.sort((a, b) => b.dateAndTime.compareTo(a.dateAndTime));
 
                 // Code for sorting ascending/descending
                 // snapshot.data!.sort((a, b) => a.dateTime.compareTo(b.dateTime));
@@ -208,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                 //
                 final groupByMonth = groupBy(transactionsList, (obj) {
                   final objectDateTime =
-                      DateTime.parse(obj.dateTime).formatMonth();
+                      DateTime.parse(obj.dateAndTime).formatMonth();
                   return objectDateTime;
                 });
                 return Column(
@@ -227,7 +227,7 @@ class _HomePageState extends State<HomePage> {
                       child: ListView.builder(
                         itemCount: groupByMonth.length,
                         itemBuilder: (context, index) {
-                          final List<TransactionModelIsar> monthEntryValue =
+                          final monthEntryValue =
                               groupByMonth.values.toList()[index];
                           final String monthEntryKey =
                               groupByMonth.keys.toList()[index];
@@ -271,7 +271,8 @@ class _HomePageState extends State<HomePage> {
                                     // Value is List<TransactionModelIsar> per month
                                     groupBy(monthEntryValue, (obj) {
                                   final objectDateTime =
-                                      DateTime.parse(obj.dateTime).formatDay();
+                                      DateTime.parse(obj.dateAndTime)
+                                          .formatDay();
                                   return objectDateTime;
                                 });
                                 return Column(

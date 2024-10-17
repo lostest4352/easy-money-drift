@@ -1,7 +1,9 @@
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expense_tracker/blocs/transaction_bloc/transactions_bloc.dart';
-import 'package:flutter_expense_tracker/database/isar_classes.dart';
+import 'package:flutter_expense_tracker/database/categories.dart';
+import 'package:flutter_expense_tracker/database/drift_database.dart';
 import 'package:flutter_expense_tracker/global_variables/dropdown_colors.dart';
 
 import 'package:flutter_expense_tracker/blocs/category_bloc/category_bloc.dart';
@@ -10,7 +12,7 @@ import 'package:go_router/go_router.dart';
 
 class CategoryModifyDialog extends StatefulWidget {
   final bool editMode;
-  final CategoryModelIsar? selectedListItem;
+  final CategoryModelDriftData? selectedListItem;
   const CategoryModifyDialog({
     super.key,
     required this.editMode,
@@ -28,9 +30,11 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
 
   @override
   void initState() {
-    categoryController.text = widget.selectedListItem?.transactionType ?? "";
-    isIncome.value = widget.selectedListItem?.isIncome ?? true;
-    colorsValue = widget.selectedListItem?.colorsValue ?? Colors.red.value;
+    categoryController.text =
+        widget.selectedListItem?.categoryModel?.transactionType ?? "";
+    isIncome.value = widget.selectedListItem?.categoryModel?.isIncome ?? true;
+    colorsValue =
+        widget.selectedListItem?.categoryModel?.colorsValue ?? Colors.red.value;
     super.initState();
   }
 
@@ -151,13 +155,18 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                                             children: [
                                               TextButton(
                                                 onPressed: () {
-                                                  blocCategories.add(
-                                                    CategoryDeleteEvent(
-                                                      selectedCategoryModelIsar:
-                                                          widget
-                                                              .selectedListItem!,
-                                                    ),
-                                                  );
+                                                  final event = widget
+                                                      .selectedListItem
+                                                      ?.categoryModel;
+                                                  if (event != null) {
+                                                    blocCategories.add(
+                                                      // TODO
+                                                      CategoryDeleteEvent(
+                                                        categoryModel: event,
+                                                      ),
+                                                    );
+                                                  }
+
                                                   context.pop();
                                                   context.pop();
                                                 },
@@ -201,31 +210,53 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                             ),
                             onPressed: () {
                               if (categoryController.text != "") {
-                                CategoryModelIsar categoryModelIsar =
-                                    CategoryModelIsar()
-                                      ..transactionType =
-                                          categoryController.text
-                                      ..colorsValue = colorsValue
-                                      ..isIncome = isIncome.value ?? true;
+                                // CategoryModelIsar categoryModelIsar =
+                                //     CategoryModelIsar()
+                                //       ..transactionType =
+                                //           categoryController.text
+                                //       ..colorsValue = colorsValue
+                                //       ..isIncome = isIncome.value ?? true;
+                                // TODO
+                                final model = CategoryModel(
+                                    transactionType: categoryController.text,
+                                    isIncome: isIncome.value ?? true,
+                                    colorsValue: colorsValue);
+                                final driftCompanion =
+                                    CategoryModelDriftCompanion.insert(
+                                        categoryModel:
+                                            drift.Value.absentIfNull(model));
                                 if (widget.editMode == false) {
                                   blocCategories.add(
+                                    // CategoryAddEvent(
+                                    //   categoryModelIsars: categoryModelIsar,
+                                    // ),
                                     CategoryAddEvent(
-                                      categoryModelIsars: categoryModelIsar,
-                                    ),
+                                        categoryModelDriftCompanion:
+                                            driftCompanion),
                                   );
                                   context.pop();
                                 } else if (widget.editMode == true) {
-                                  blocCategories.add(
-                                    CategoryEditEvent(
-                                      selectedCategoryModelIsar:
-                                          widget.selectedListItem!,
-                                      selectedCategoryModelId:
-                                          widget.selectedListItem!.id,
+                                  // TODO
+                                  final model = CategoryModel(
                                       transactionType: categoryController.text,
                                       isIncome: isIncome.value ?? true,
-                                      colorsValue: colorsValue,
-                                    ),
-                                  );
+                                      colorsValue: colorsValue);
+                                  final categoryModelDriftData =
+                                      CategoryModelDriftData(
+                                          categoryModel: model);
+                                  blocCategories.add(
+                                      // CategoryEditEvent(
+                                      //   selectedCategoryModelIsar:
+                                      //       widget.selectedListItem!,
+                                      //   selectedCategoryModelId:
+                                      //       widget.selectedListItem!.id,
+                                      //   transactionType: categoryController.text,
+                                      //   isIncome: isIncome.value ?? true,
+                                      //   colorsValue: colorsValue,
+                                      // ),
+                                      CategoryEditEvent(
+                                          categoryModelDriftData:
+                                              categoryModelDriftData));
                                   context.pop();
                                 }
                               }

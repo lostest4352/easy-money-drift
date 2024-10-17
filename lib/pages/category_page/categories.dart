@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/blocs/category_bloc/category_bloc.dart';
-import 'package:flutter_expense_tracker/database/isar_classes.dart';
+import 'package:flutter_expense_tracker/database/drift_database.dart';
 import 'package:flutter_expense_tracker/pages/widgets/app_drawer.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,7 +73,7 @@ class _ExpenseCategoriesState extends State<ExpenseCategories> {
           //       itemsInList.transactionType == "otherExpense";
           // });
 
-          final List<CategoryModelIsar>? categoryList =
+          final List<CategoryModelDriftData>? categoryList =
               state.listOfCategoryData;
 
           if (categoryList == null) {
@@ -105,10 +105,13 @@ class _ExpenseCategoriesState extends State<ExpenseCategories> {
                       },
                       child: ListTile(
                         leading: CircleAvatar(
-                          backgroundColor: categoryList[index].isIncome == true
-                              ? Colors.blue
-                              : Colors.red,
-                          child: categoryList[index].isIncome == true
+                          backgroundColor:
+                              categoryList[index].categoryModel?.isIncome ==
+                                      true
+                                  ? Colors.blue
+                                  : Colors.red,
+                          child: categoryList[index].categoryModel?.isIncome ==
+                                  true
                               ? const Icon(
                                   Icons.addchart,
                                   color: Colors.white,
@@ -119,7 +122,8 @@ class _ExpenseCategoriesState extends State<ExpenseCategories> {
                                 ),
                         ),
                         title: Text(
-                          categoryList[index].transactionType,
+                          categoryList[index].categoryModel?.transactionType ??
+                              "error here", // TODO
                         ),
                       ),
                     );
