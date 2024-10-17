@@ -29,6 +29,11 @@ class $TransactionModelDriftTable extends TransactionModelDrift
   late final GeneratedColumn<int> amount = GeneratedColumn<int>(
       'amount', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+      'note', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _categoryModelMeta =
       const VerificationMeta('categoryModel');
   @override
@@ -40,7 +45,7 @@ class $TransactionModelDriftTable extends TransactionModelDrift
               $TransactionModelDriftTable.$convertercategoryModeln);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, dateAndTime, amount, categoryModel];
+      [id, dateAndTime, amount, note, categoryModel];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -69,6 +74,10 @@ class $TransactionModelDriftTable extends TransactionModelDrift
     } else if (isInserting) {
       context.missing(_amountMeta);
     }
+    if (data.containsKey('note')) {
+      context.handle(
+          _noteMeta, note.isAcceptableOrUnknown(data['note']!, _noteMeta));
+    }
     context.handle(_categoryModelMeta, const VerificationResult.success());
     return context;
   }
@@ -86,6 +95,8 @@ class $TransactionModelDriftTable extends TransactionModelDrift
           .read(DriftSqlType.string, data['${effectivePrefix}date_and_time'])!,
       amount: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}amount'])!,
+      note: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}note']),
       categoryModel: $TransactionModelDriftTable.$convertercategoryModeln
           .fromSql(attachedDatabase.typeMapping.read(
               DriftSqlType.string, data['${effectivePrefix}category_model'])),
@@ -109,11 +120,13 @@ class TransactionModelDriftData extends DataClass
   final int id;
   final String dateAndTime;
   final int amount;
+  final String? note;
   final CategoryModel? categoryModel;
   const TransactionModelDriftData(
       {required this.id,
       required this.dateAndTime,
       required this.amount,
+      this.note,
       this.categoryModel});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -121,6 +134,9 @@ class TransactionModelDriftData extends DataClass
     map['id'] = Variable<int>(id);
     map['date_and_time'] = Variable<String>(dateAndTime);
     map['amount'] = Variable<int>(amount);
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
     if (!nullToAbsent || categoryModel != null) {
       map['category_model'] = Variable<String>($TransactionModelDriftTable
           .$convertercategoryModeln
@@ -134,6 +150,7 @@ class TransactionModelDriftData extends DataClass
       id: Value(id),
       dateAndTime: Value(dateAndTime),
       amount: Value(amount),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
       categoryModel: categoryModel == null && nullToAbsent
           ? const Value.absent()
           : Value(categoryModel),
@@ -147,6 +164,7 @@ class TransactionModelDriftData extends DataClass
       id: serializer.fromJson<int>(json['id']),
       dateAndTime: serializer.fromJson<String>(json['dateAndTime']),
       amount: serializer.fromJson<int>(json['amount']),
+      note: serializer.fromJson<String?>(json['note']),
       categoryModel: $TransactionModelDriftTable.$convertercategoryModeln
           .fromJson(serializer.fromJson<String?>(json['categoryModel'])),
     );
@@ -158,6 +176,7 @@ class TransactionModelDriftData extends DataClass
       'id': serializer.toJson<int>(id),
       'dateAndTime': serializer.toJson<String>(dateAndTime),
       'amount': serializer.toJson<int>(amount),
+      'note': serializer.toJson<String?>(note),
       'categoryModel': serializer.toJson<String?>($TransactionModelDriftTable
           .$convertercategoryModeln
           .toJson(categoryModel)),
@@ -168,11 +187,13 @@ class TransactionModelDriftData extends DataClass
           {int? id,
           String? dateAndTime,
           int? amount,
+          Value<String?> note = const Value.absent(),
           Value<CategoryModel?> categoryModel = const Value.absent()}) =>
       TransactionModelDriftData(
         id: id ?? this.id,
         dateAndTime: dateAndTime ?? this.dateAndTime,
         amount: amount ?? this.amount,
+        note: note.present ? note.value : this.note,
         categoryModel:
             categoryModel.present ? categoryModel.value : this.categoryModel,
       );
@@ -183,6 +204,7 @@ class TransactionModelDriftData extends DataClass
       dateAndTime:
           data.dateAndTime.present ? data.dateAndTime.value : this.dateAndTime,
       amount: data.amount.present ? data.amount.value : this.amount,
+      note: data.note.present ? data.note.value : this.note,
       categoryModel: data.categoryModel.present
           ? data.categoryModel.value
           : this.categoryModel,
@@ -195,13 +217,14 @@ class TransactionModelDriftData extends DataClass
           ..write('id: $id, ')
           ..write('dateAndTime: $dateAndTime, ')
           ..write('amount: $amount, ')
+          ..write('note: $note, ')
           ..write('categoryModel: $categoryModel')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, dateAndTime, amount, categoryModel);
+  int get hashCode => Object.hash(id, dateAndTime, amount, note, categoryModel);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -209,6 +232,7 @@ class TransactionModelDriftData extends DataClass
           other.id == this.id &&
           other.dateAndTime == this.dateAndTime &&
           other.amount == this.amount &&
+          other.note == this.note &&
           other.categoryModel == this.categoryModel);
 }
 
@@ -217,17 +241,20 @@ class TransactionModelDriftCompanion
   final Value<int> id;
   final Value<String> dateAndTime;
   final Value<int> amount;
+  final Value<String?> note;
   final Value<CategoryModel?> categoryModel;
   const TransactionModelDriftCompanion({
     this.id = const Value.absent(),
     this.dateAndTime = const Value.absent(),
     this.amount = const Value.absent(),
+    this.note = const Value.absent(),
     this.categoryModel = const Value.absent(),
   });
   TransactionModelDriftCompanion.insert({
     this.id = const Value.absent(),
     required String dateAndTime,
     required int amount,
+    this.note = const Value.absent(),
     this.categoryModel = const Value.absent(),
   })  : dateAndTime = Value(dateAndTime),
         amount = Value(amount);
@@ -235,12 +262,14 @@ class TransactionModelDriftCompanion
     Expression<int>? id,
     Expression<String>? dateAndTime,
     Expression<int>? amount,
+    Expression<String>? note,
     Expression<String>? categoryModel,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (dateAndTime != null) 'date_and_time': dateAndTime,
       if (amount != null) 'amount': amount,
+      if (note != null) 'note': note,
       if (categoryModel != null) 'category_model': categoryModel,
     });
   }
@@ -249,11 +278,13 @@ class TransactionModelDriftCompanion
       {Value<int>? id,
       Value<String>? dateAndTime,
       Value<int>? amount,
+      Value<String?>? note,
       Value<CategoryModel?>? categoryModel}) {
     return TransactionModelDriftCompanion(
       id: id ?? this.id,
       dateAndTime: dateAndTime ?? this.dateAndTime,
       amount: amount ?? this.amount,
+      note: note ?? this.note,
       categoryModel: categoryModel ?? this.categoryModel,
     );
   }
@@ -270,6 +301,9 @@ class TransactionModelDriftCompanion
     if (amount.present) {
       map['amount'] = Variable<int>(amount.value);
     }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
     if (categoryModel.present) {
       map['category_model'] = Variable<String>($TransactionModelDriftTable
           .$convertercategoryModeln
@@ -284,6 +318,7 @@ class TransactionModelDriftCompanion
           ..write('id: $id, ')
           ..write('dateAndTime: $dateAndTime, ')
           ..write('amount: $amount, ')
+          ..write('note: $note, ')
           ..write('categoryModel: $categoryModel')
           ..write(')'))
         .toString();
@@ -492,6 +527,7 @@ typedef $$TransactionModelDriftTableCreateCompanionBuilder
   Value<int> id,
   required String dateAndTime,
   required int amount,
+  Value<String?> note,
   Value<CategoryModel?> categoryModel,
 });
 typedef $$TransactionModelDriftTableUpdateCompanionBuilder
@@ -499,6 +535,7 @@ typedef $$TransactionModelDriftTableUpdateCompanionBuilder
   Value<int> id,
   Value<String> dateAndTime,
   Value<int> amount,
+  Value<String?> note,
   Value<CategoryModel?> categoryModel,
 });
 
@@ -519,6 +556,9 @@ class $$TransactionModelDriftTableFilterComposer
 
   ColumnFilters<int> get amount => $composableBuilder(
       column: $table.amount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get note => $composableBuilder(
+      column: $table.note, builder: (column) => ColumnFilters(column));
 
   ColumnWithTypeConverterFilters<CategoryModel?, CategoryModel, String>
       get categoryModel => $composableBuilder(
@@ -544,6 +584,9 @@ class $$TransactionModelDriftTableOrderingComposer
   ColumnOrderings<int> get amount => $composableBuilder(
       column: $table.amount, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get note => $composableBuilder(
+      column: $table.note, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get categoryModel => $composableBuilder(
       column: $table.categoryModel,
       builder: (column) => ColumnOrderings(column));
@@ -566,6 +609,9 @@ class $$TransactionModelDriftTableAnnotationComposer
 
   GeneratedColumn<int> get amount =>
       $composableBuilder(column: $table.amount, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
 
   GeneratedColumnWithTypeConverter<CategoryModel?, String> get categoryModel =>
       $composableBuilder(
@@ -606,24 +652,28 @@ class $$TransactionModelDriftTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String> dateAndTime = const Value.absent(),
             Value<int> amount = const Value.absent(),
+            Value<String?> note = const Value.absent(),
             Value<CategoryModel?> categoryModel = const Value.absent(),
           }) =>
               TransactionModelDriftCompanion(
             id: id,
             dateAndTime: dateAndTime,
             amount: amount,
+            note: note,
             categoryModel: categoryModel,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String dateAndTime,
             required int amount,
+            Value<String?> note = const Value.absent(),
             Value<CategoryModel?> categoryModel = const Value.absent(),
           }) =>
               TransactionModelDriftCompanion.insert(
             id: id,
             dateAndTime: dateAndTime,
             amount: amount,
+            note: note,
             categoryModel: categoryModel,
           ),
           withReferenceMapper: (p0) => p0

@@ -2,9 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker/database/categories.dart';
+import 'package:flutter_expense_tracker/database/categories_type_converter.dart';
 import 'package:flutter_expense_tracker/database/drift_database.dart';
 import 'package:flutter_expense_tracker/global_variables/dropdown_colors.dart';
+import 'package:flutter_expense_tracker/models/category_model.dart';
 
 part 'category_event.dart';
 part 'category_state.dart';

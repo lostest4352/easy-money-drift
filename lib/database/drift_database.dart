@@ -1,10 +1,11 @@
 import 'dart:io';
+import 'package:flutter_expense_tracker/models/category_model.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_expense_tracker/database/categories.dart';
+import 'package:flutter_expense_tracker/database/categories_type_converter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:drift/extensions/json1.dart';
 
@@ -15,6 +16,7 @@ class TransactionModelDrift extends Table {
   TextColumn get dateAndTime =>
       text()(); // dateTime is already a drift's variable
   IntColumn get amount => integer()();
+  TextColumn get note => text().nullable()();
   //
   TextColumn get categoryModel =>
       text().map(const CategoryConverter()).nullable()();

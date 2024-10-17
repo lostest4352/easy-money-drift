@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expense_tracker/blocs/category_bloc/category_bloc.dart';
-import 'package:flutter_expense_tracker/database/isar_classes.dart';
-import 'package:flutter_expense_tracker/database/isar_service.dart';
+import 'package:flutter_expense_tracker/database/drift_database.dart';
+import 'package:flutter_expense_tracker/models/category_model.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -15,12 +15,12 @@ import 'package:flutter_expense_tracker/pages/widgets/popup_textfield_title.dart
 
 class EntryDialog extends StatefulWidget {
   final bool editMode;
-  final TransactionModelIsar? transaction;
+  final TransactionModelDriftData? transaction;
   const EntryDialog({
-    Key? key,
+    super.key,
     required this.editMode,
     this.transaction,
-  }) : super(key: key);
+  });
 
   @override
   State<EntryDialog> createState() => _EntryDialogState();
@@ -41,9 +41,10 @@ class _EntryDialogState extends State<EntryDialog> {
   final String currentDateFormatted =
       DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-  String? transactionType;
-  bool? isIncome;
-  int? colorsValue;
+  // String? transactionType;
+  // bool? isIncome;
+  // int? colorsValue;
+  CategoryModel? categoryModel;
 
   @override
   void initState() {
@@ -51,11 +52,13 @@ class _EntryDialogState extends State<EntryDialog> {
     if (widget.editMode == true) {
       amountController.text = widget.transaction?.amount.toString() ?? "";
       noteController.text = widget.transaction?.note ?? "";
-      selectedDate = DateTime.parse(widget.transaction!.dateTime);
+      selectedDate = DateTime.parse(widget.transaction!.dateAndTime);
       //
-      transactionType = widget.transaction?.transactionType ?? "";
-      isIncome = widget.transaction?.isIncome ?? true;
-      colorsValue = widget.transaction?.colorsValue;
+      categoryModel = widget.transaction!.categoryModel;
+
+      // transactionType = widget.transaction?.transactionType ?? "";
+      // isIncome = widget.transaction?.isIncome ?? true;
+      // colorsValue = widget.transaction?.colorsValue;
     }
   }
 
@@ -68,7 +71,7 @@ class _EntryDialogState extends State<EntryDialog> {
   }
 
   TransactionsBloc get blocTransaction => context.read<TransactionsBloc>();
-  IsarService get isarService => context.read<IsarService>();
+  AppDatabase get isarService => context.read<AppDatabase>();
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +98,7 @@ class _EntryDialogState extends State<EntryDialog> {
                           onTap: () {
                             blocTransaction.add(
                               TransactionsDeleteEvent(
-                                widgetTransactionModelIsar: widget.transaction,
+                                transactionModelId: widget.transaction!.id,
                               ),
                             );
                             context.pop();
@@ -272,8 +275,9 @@ class _EntryDialogState extends State<EntryDialog> {
                                   if (state.listOfCategoryData != null) {
                                     CategoryBloc blocCategories =
                                         context.read<CategoryBloc>();
-                                    final categoryList = state.listOfCategoryData;
-            
+                                    final categoryList =
+                                        state.listOfCategoryData;
+
                                     if (categoryList!.isEmpty) {
                                       blocCategories
                                           .add(CategoryAddDefaultItemsEvent());
@@ -290,8 +294,9 @@ class _EntryDialogState extends State<EntryDialog> {
                                                     transactionType =
                                                         categoryList[index]
                                                             .transactionType;
-                                                    isIncome = categoryList[index]
-                                                        .isIncome;
+                                                    isIncome =
+                                                        categoryList[index]
+                                                            .isIncome;
                                                     colorsValue =
                                                         categoryList[index]
                                                             .colorsValue;

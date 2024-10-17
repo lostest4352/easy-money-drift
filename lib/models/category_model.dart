@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:drift/drift.dart';
-
 class CategoryModel {
   String transactionType;
   bool isIncome;
@@ -61,21 +57,4 @@ class CategoryModel {
   @override
   int get hashCode =>
       transactionType.hashCode ^ isIncome.hashCode ^ colorsValue.hashCode;
-}
-
-// Type Converter related
-class CategoryConverter extends TypeConverter<CategoryModel, String>
-    with JsonTypeConverter<CategoryModel, String> {
-  //
-  const CategoryConverter();
-  //
-  @override
-  CategoryModel fromSql(String fromDb) {
-    return CategoryModel.fromMap(json.decode(fromDb) as Map<String, dynamic>);
-  }
-
-  @override
-  String toSql(CategoryModel value) {
-    return json.encode(value.toMap());
-  }
 }
