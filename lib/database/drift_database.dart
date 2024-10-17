@@ -62,10 +62,10 @@ class AppDatabase extends _$AppDatabase {
     final allTransactions = (select(transactionModelDrift)
           ..where((val) {
             // may cause issues. from: https://github.com/simolus3/drift/issues/2734
-            return val.categoryModel
-                .jsonExtract(r"$.transactionType")
-                .equals(keyword);
-            // return val.categoryModel.contains(keyword);
+            // return val.categoryModel
+            //     .jsonExtract(r"$.transactionType")
+            //     .equals(keyword);
+            return val.categoryModel.contains(keyword);
           })
           ..orderBy([
             (transaction) => OrderingTerm(
