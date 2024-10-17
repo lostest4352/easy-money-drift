@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expense_tracker/blocs/search_cubit/search_cubit.dart';
-import 'package:flutter_expense_tracker/database/isar_classes.dart';
+import 'package:flutter_expense_tracker/database/drift_database.dart';
 import 'package:flutter_expense_tracker/pages/page_functions/date_formatter.dart';
 import 'package:flutter_expense_tracker/pages/home_page/transaction_view.dart';
 import 'package:flutter_expense_tracker/pages/widgets/popup_textfield_items.dart';
@@ -52,11 +52,11 @@ class _SearchPageState extends State<SearchPage> {
           body: Builder(
             builder: (context) {
               if (state is SearchLoadedState) {
-                final List<TransactionModelIsar>? transactionsList =
+                final List<TransactionModelDriftData>? transactionsList =
                     state.listOfTransactionData;
-                transactionsList?.sort(
-                  (a, b) => b.dateTime.compareTo(a.dateTime),
-                );
+                // transactionsList?.sort(
+                //   (a, b) => b.dateTime.compareTo(a.dateTime),
+                // );
                 return Column(
                   children: [
                     const SizedBox(
@@ -71,9 +71,9 @@ class _SearchPageState extends State<SearchPage> {
                               child: Text("No Data"),
                             );
                           }
-                          final String transactionDate =
-                              DateTime.parse(transactionsList[index].dateTime)
-                                  .formatDay();
+                          final String transactionDate = DateTime.parse(
+                                  transactionsList[index].dateAndTime)
+                              .formatDay();
                           return Column(
                             children: [
                               () {

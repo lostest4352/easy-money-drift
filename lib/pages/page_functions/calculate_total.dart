@@ -1,12 +1,12 @@
-import '../../database/isar_classes.dart';
+import 'package:flutter_expense_tracker/database/drift_database.dart';
 
 ({int totalIncome, int totalExpense}) calculateTotalIncomeOrExpenses(
-    List<TransactionModelIsar> snapshot) {
+    List<TransactionModelDriftData> snapshot) {
   int totalIncome = 0;
   int totalExpense = 0;
 
   for (final transactionItem in snapshot) {
-    if (transactionItem.isIncome == true) {
+    if (transactionItem.categoryModel?.isIncome == true) {
       totalIncome += transactionItem.amount;
     } else {
       totalExpense += transactionItem.amount;
@@ -16,13 +16,13 @@ import '../../database/isar_classes.dart';
 }
 
 ({int totalIncome, int totalExpense, int totalValue}) calculateTotalValue(
-    List<TransactionModelIsar> transactionList) {
+    List<TransactionModelDriftData> transactionList) {
   int totalIncome = 0;
   int totalExpense = 0;
   int totalValue = 0;
 
   for (final transaction in transactionList) {
-    if (transaction.isIncome == true) {
+    if (transaction.categoryModel?.isIncome == true) {
       totalIncome += transaction.amount;
     } else {
       totalExpense -= transaction.amount;

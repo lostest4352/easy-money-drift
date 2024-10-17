@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -206,43 +207,64 @@ class _EntryDialogState extends State<EntryDialog> {
                         padding: const EdgeInsets.only(right: 10, bottom: 10),
                         child: InkWell(
                           onTap: () {
-                            if (transactionType != null &&
-                                isIncome != null &&
-                                colorsValue != null) {
-                              TransactionModelIsar transactionModelIsar =
-                                  TransactionModelIsar()
-                                    ..amount = int.parse(amountController.text)
-                                    ..dateTime = selectedDate.toString()
-                                    ..note = (noteController.text.trim() == "")
-                                        ? null
-                                        : noteController.text.trim()
-                                    //
-                                    ..transactionType = transactionType ?? ""
-                                    ..isIncome = isIncome ?? true
-                                    ..colorsValue =
-                                        colorsValue ?? Colors.red.value;
+                            if (categoryModel != null) {
+                              //
+                              final model = TransactionModelDriftCompanion(
+                                  amount: drift.Value(
+                                      int.parse(amountController.text)),
+                                  dateAndTime:
+                                      drift.Value(selectedDate.toString()),
+                                  note: drift.Value.absentIfNull(
+                                      (noteController.text.trim() == "")
+                                          ? null
+                                          : noteController.text.trim()),
+                                  categoryModel: drift.Value(categoryModel));
+
+                              //
+                              // TransactionModelIsar transactionModelIsar =
+                              //     TransactionModelIsar()
+                              //       ..amount = int.parse(amountController.text)
+                              //       ..dateTime = selectedDate.toString()
+                              //       ..note = (noteController.text.trim() == "")
+                              //           ? null
+                              //           : noteController.text.trim()
+                              //       //
+                              //       ..transactionType = transactionType ?? ""
+                              //       ..isIncome = isIncome ?? true
+                              //       ..colorsValue =
+                              //           colorsValue ?? Colors.red.value;
                               if (widget.editMode == false) {
                                 blocTransaction.add(
                                   TransactionsAddEvent(
-                                    transactionModelIsar: transactionModelIsar,
+                                    transactionModelDriftCompanion: model,
                                   ),
                                 );
                               } else {
-                                blocTransaction.add(
-                                  TransactionsEditEvent(
-                                    selectedTransactionModelId:
-                                        widget.transaction!.id,
-                                    amount: int.parse(amountController.text),
-                                    dateTime: selectedDate.toString(),
-                                    note: (noteController.text.trim() == "")
-                                        ? null
-                                        : noteController.text.trim(),
-                                    //
-                                    transactionType: transactionType!,
-                                    isIncome: isIncome!,
-                                    colorsValue: colorsValue!,
-                                  ),
+                                final model = TransactionModelDriftData(
+                                  id: widget.transaction!.id,
+                                  amount: int.parse(amountController.text),
+                                  dateAndTime: selectedDate.toString(),
+                                  note: (noteController.text.trim() == "")
+                                      ? null
+                                      : noteController.text.trim(),
+                                  categoryModel: categoryModel,
                                 );
+                                blocTransaction.add(TransactionsEditEvent(
+                                        transactionModelData: model)
+                                    // TransactionsEditEvent(
+                                    //   selectedTransactionModelId:
+                                    //       widget.transaction!.id,
+                                    //   amount: int.parse(amountController.text),
+                                    //   dateTime: selectedDate.toString(),
+                                    //   note: (noteController.text.trim() == "")
+                                    //       ? null
+                                    //       : noteController.text.trim(),
+                                    //   //
+                                    //   transactionType: transactionType!,
+                                    //   isIncome: isIncome!,
+                                    //   colorsValue: colorsValue!,
+                                    // ),
+                                    );
                               }
                             }
                             context.pop();
@@ -291,26 +313,32 @@ class _EntryDialogState extends State<EntryDialog> {
                                               return ListTile(
                                                 onTap: () {
                                                   setState(() {
-                                                    transactionType =
+                                                    categoryModel =
                                                         categoryList[index]
-                                                            .transactionType;
-                                                    isIncome =
-                                                        categoryList[index]
-                                                            .isIncome;
-                                                    colorsValue =
-                                                        categoryList[index]
-                                                            .colorsValue;
+                                                            .categoryModel;
+                                                    // transactionType =
+                                                    //     categoryList[index]
+                                                    //         .transactionType;
+                                                    // isIncome =
+                                                    //     categoryList[index]
+                                                    //         .isIncome;
+                                                    // colorsValue =
+                                                    //     categoryList[index]
+                                                    //         .colorsValue;
                                                   });
                                                   context.pop();
                                                 },
+                                                // TODO null
                                                 leading: CircleAvatar(
                                                   backgroundColor:
                                                       (categoryList[index]
+                                                                  .categoryModel!
                                                                   .isIncome) ==
                                                               true
                                                           ? Colors.blue
                                                           : Colors.red,
                                                   child: (categoryList[index]
+                                                              .categoryModel!
                                                               .isIncome ==
                                                           true)
                                                       ? const Icon(
@@ -326,6 +354,7 @@ class _EntryDialogState extends State<EntryDialog> {
                                                 //
                                                 title: Text(
                                                   categoryList[index]
+                                                      .categoryModel!
                                                       .transactionType,
                                                 ),
                                               );
@@ -376,7 +405,8 @@ class _EntryDialogState extends State<EntryDialog> {
                       );
                     },
                     child: PopupCategoryItems(
-                      title: transactionType ?? "Select Category",
+                      title:
+                          categoryModel?.transactionType ?? "Select Category",
                     ),
                   ),
                   const SizedBox(

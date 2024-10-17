@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker/database/isar_classes.dart';
+import 'package:flutter_expense_tracker/database/drift_database.dart';
 import 'package:flutter_expense_tracker/pages/home_page/entry_dialog.dart';
 
 class TransactionView extends StatelessWidget {
-  final TransactionModelIsar transaction;
+  final TransactionModelDriftData transaction;
   const TransactionView({
     super.key,
     required this.transaction,
@@ -38,11 +38,12 @@ class TransactionView extends StatelessWidget {
                   Row(
                     children: [
                       CircleAvatar(
-                        backgroundColor: (transaction.isIncome == true)
-                            ? Colors.green
-                            : Colors.red,
+                        backgroundColor:
+                            (transaction.categoryModel?.isIncome == true)
+                                ? Colors.green
+                                : Colors.red,
                         maxRadius: 12,
-                        child: (transaction.isIncome == true)
+                        child: (transaction.categoryModel?.isIncome == true)
                             ? const Icon(
                                 Icons.add_circle_outline_rounded,
                                 color: Colors.white,
@@ -59,7 +60,8 @@ class TransactionView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            transaction.transactionType,
+                            transaction.categoryModel?.transactionType ??
+                                "here", // TODO
                             style: const TextStyle(fontWeight: FontWeight.w500),
                           ),
                         ],
@@ -73,7 +75,7 @@ class TransactionView extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w500,
-                            color: (transaction.isIncome == true)
+                            color: (transaction.categoryModel?.isIncome == true)
                                 ? Colors.green
                                 : Colors.red,
                           ),
