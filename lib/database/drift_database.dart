@@ -22,6 +22,7 @@ class TransactionModelDrift extends Table {
 }
 
 class CategoryModelDrift extends Table {
+  IntColumn get id => integer().autoIncrement()();
   //
   TextColumn get categoryModel => text().map(const CategoryConverter())();
 }
@@ -117,11 +118,11 @@ class AppDatabase extends _$AppDatabase {
       ..where((row) => row.categoryModel.equalsValue(categoryModel)));
 
     final editValue = (update(categoryModelDrift)
-          ..where((val) {
+          ..where((tbl) {
             // TODO here
-            debugPrint(val.categoryModel.toString());
+            debugPrint(tbl.categoryModel.toString());
             debugPrint(categoryModel.toString());
-            return ifNotExist & val.categoryModel.equalsValue(categoryModel);
+            return ifNotExist & tbl.categoryModel.equalsValue(categoryModel);
           }))
         .write(
             CategoryModelDriftCompanion(categoryModel: Value(categoryModel)));
