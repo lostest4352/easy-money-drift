@@ -39,11 +39,11 @@ class TransactionView extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         backgroundColor:
-                            (transaction.categoryModel.isIncome == true)
+                            (transaction.categoryModel?.isIncome == true)
                                 ? Colors.green
                                 : Colors.red,
                         maxRadius: 12,
-                        child: (transaction.categoryModel.isIncome == true)
+                        child: (transaction.categoryModel?.isIncome == true)
                             ? const Icon(
                                 Icons.add_circle_outline_rounded,
                                 color: Colors.white,

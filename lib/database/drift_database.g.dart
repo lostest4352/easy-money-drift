@@ -326,15 +326,6 @@ class $CategoryModelDriftTable extends CategoryModelDrift
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $CategoryModelDriftTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
   static const VerificationMeta _categoryModelMeta =
       const VerificationMeta('categoryModel');
   @override
@@ -345,7 +336,7 @@ class $CategoryModelDriftTable extends CategoryModelDrift
           .withConverter<CategoryModel>(
               $CategoryModelDriftTable.$convertercategoryModel);
   @override
-  List<GeneratedColumn> get $columns => [id, categoryModel];
+  List<GeneratedColumn> get $columns => [categoryModel];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -357,21 +348,16 @@ class $CategoryModelDriftTable extends CategoryModelDrift
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
     context.handle(_categoryModelMeta, const VerificationResult.success());
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => const {};
   @override
   CategoryModelDriftData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return CategoryModelDriftData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       categoryModel: $CategoryModelDriftTable.$convertercategoryModel.fromSql(
           attachedDatabase.typeMapping.read(
               DriftSqlType.string, data['${effectivePrefix}category_model'])!),
@@ -389,13 +375,11 @@ class $CategoryModelDriftTable extends CategoryModelDrift
 
 class CategoryModelDriftData extends DataClass
     implements Insertable<CategoryModelDriftData> {
-  final int id;
   final CategoryModel categoryModel;
-  const CategoryModelDriftData({required this.id, required this.categoryModel});
+  const CategoryModelDriftData({required this.categoryModel});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
     {
       map['category_model'] = Variable<String>($CategoryModelDriftTable
           .$convertercategoryModel
@@ -406,7 +390,6 @@ class CategoryModelDriftData extends DataClass
 
   CategoryModelDriftCompanion toCompanion(bool nullToAbsent) {
     return CategoryModelDriftCompanion(
-      id: Value(id),
       categoryModel: Value(categoryModel),
     );
   }
@@ -415,7 +398,6 @@ class CategoryModelDriftData extends DataClass
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return CategoryModelDriftData(
-      id: serializer.fromJson<int>(json['id']),
       categoryModel: $CategoryModelDriftTable.$convertercategoryModel
           .fromJson(serializer.fromJson<String>(json['categoryModel'])),
     );
@@ -424,21 +406,18 @@ class CategoryModelDriftData extends DataClass
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
       'categoryModel': serializer.toJson<String>($CategoryModelDriftTable
           .$convertercategoryModel
           .toJson(categoryModel)),
     };
   }
 
-  CategoryModelDriftData copyWith({int? id, CategoryModel? categoryModel}) =>
+  CategoryModelDriftData copyWith({CategoryModel? categoryModel}) =>
       CategoryModelDriftData(
-        id: id ?? this.id,
         categoryModel: categoryModel ?? this.categoryModel,
       );
   CategoryModelDriftData copyWithCompanion(CategoryModelDriftCompanion data) {
     return CategoryModelDriftData(
-      id: data.id.present ? data.id.value : this.id,
       categoryModel: data.categoryModel.present
           ? data.categoryModel.value
           : this.categoryModel,
@@ -448,62 +427,60 @@ class CategoryModelDriftData extends DataClass
   @override
   String toString() {
     return (StringBuffer('CategoryModelDriftData(')
-          ..write('id: $id, ')
           ..write('categoryModel: $categoryModel')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, categoryModel);
+  int get hashCode => categoryModel.hashCode;
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is CategoryModelDriftData &&
-          other.id == this.id &&
           other.categoryModel == this.categoryModel);
 }
 
 class CategoryModelDriftCompanion
     extends UpdateCompanion<CategoryModelDriftData> {
-  final Value<int> id;
   final Value<CategoryModel> categoryModel;
+  final Value<int> rowid;
   const CategoryModelDriftCompanion({
-    this.id = const Value.absent(),
     this.categoryModel = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   CategoryModelDriftCompanion.insert({
-    this.id = const Value.absent(),
     required CategoryModel categoryModel,
+    this.rowid = const Value.absent(),
   }) : categoryModel = Value(categoryModel);
   static Insertable<CategoryModelDriftData> custom({
-    Expression<int>? id,
     Expression<String>? categoryModel,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
       if (categoryModel != null) 'category_model': categoryModel,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   CategoryModelDriftCompanion copyWith(
-      {Value<int>? id, Value<CategoryModel>? categoryModel}) {
+      {Value<CategoryModel>? categoryModel, Value<int>? rowid}) {
     return CategoryModelDriftCompanion(
-      id: id ?? this.id,
       categoryModel: categoryModel ?? this.categoryModel,
+      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
     if (categoryModel.present) {
       map['category_model'] = Variable<String>($CategoryModelDriftTable
           .$convertercategoryModel
           .toSql(categoryModel.value));
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
     }
     return map;
   }
@@ -511,8 +488,8 @@ class CategoryModelDriftCompanion
   @override
   String toString() {
     return (StringBuffer('CategoryModelDriftCompanion(')
-          ..write('id: $id, ')
-          ..write('categoryModel: $categoryModel')
+          ..write('categoryModel: $categoryModel, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -713,13 +690,13 @@ typedef $$TransactionModelDriftTableProcessedTableManager
         PrefetchHooks Function()>;
 typedef $$CategoryModelDriftTableCreateCompanionBuilder
     = CategoryModelDriftCompanion Function({
-  Value<int> id,
   required CategoryModel categoryModel,
+  Value<int> rowid,
 });
 typedef $$CategoryModelDriftTableUpdateCompanionBuilder
     = CategoryModelDriftCompanion Function({
-  Value<int> id,
   Value<CategoryModel> categoryModel,
+  Value<int> rowid,
 });
 
 class $$CategoryModelDriftTableFilterComposer
@@ -731,9 +708,6 @@ class $$CategoryModelDriftTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
-
   ColumnWithTypeConverterFilters<CategoryModel, CategoryModel, String>
       get categoryModel => $composableBuilder(
           column: $table.categoryModel,
@@ -749,9 +723,6 @@ class $$CategoryModelDriftTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
-
   ColumnOrderings<String> get categoryModel => $composableBuilder(
       column: $table.categoryModel,
       builder: (column) => ColumnOrderings(column));
@@ -766,9 +737,6 @@ class $$CategoryModelDriftTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
   GeneratedColumnWithTypeConverter<CategoryModel, String> get categoryModel =>
       $composableBuilder(
           column: $table.categoryModel, builder: (column) => column);
@@ -803,20 +771,20 @@ class $$CategoryModelDriftTableTableManager extends RootTableManager<
               $$CategoryModelDriftTableAnnotationComposer(
                   $db: db, $table: table),
           updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
             Value<CategoryModel> categoryModel = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
           }) =>
               CategoryModelDriftCompanion(
-            id: id,
             categoryModel: categoryModel,
+            rowid: rowid,
           ),
           createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
             required CategoryModel categoryModel,
+            Value<int> rowid = const Value.absent(),
           }) =>
               CategoryModelDriftCompanion.insert(
-            id: id,
             categoryModel: categoryModel,
+            rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
