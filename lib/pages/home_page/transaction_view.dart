@@ -60,8 +60,7 @@ class TransactionView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            transaction.categoryModel?.transactionType ??
-                                "here", // TODO
+                            transaction.categoryModel.transactionType,
                             style: const TextStyle(fontWeight: FontWeight.w500),
                           ),
                         ],
@@ -75,7 +74,7 @@ class TransactionView extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w500,
-                            color: (transaction.categoryModel?.isIncome == true)
+                            color: (transaction.categoryModel.isIncome == true)
                                 ? Colors.green
                                 : Colors.red,
                           ),

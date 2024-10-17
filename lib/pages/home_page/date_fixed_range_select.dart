@@ -5,12 +5,12 @@ import 'package:flutter_expense_tracker/blocs/transaction_bloc/transactions_bloc
 
 class DateSelectButton extends StatelessWidget {
   const DateSelectButton({
-    Key? key,
+    super.key,
     required this.bottomOpen,
     required this.buttonText,
     this.startTime,
     this.endTime,
-  }) : super(key: key);
+  });
 
   final ValueNotifier<bool> bottomOpen;
   final String buttonText;

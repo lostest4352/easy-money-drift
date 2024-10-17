@@ -121,7 +121,7 @@ class TransactionWidget extends StatelessWidget {
 
         final transactionCategoryModel = transaction.categoryModel;
 
-        if (!found && transactionCategoryModel != null) {
+        if (!found) {
           pieChartModelList.add(
             PieChartModel(
               categoryModel: transactionCategoryModel,

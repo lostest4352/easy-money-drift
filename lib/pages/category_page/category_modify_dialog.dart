@@ -1,4 +1,3 @@
-import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expense_tracker/blocs/transaction_bloc/transactions_bloc.dart';
@@ -31,10 +30,10 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
   @override
   void initState() {
     categoryController.text =
-        widget.selectedListItem?.categoryModel?.transactionType ?? "";
-    isIncome.value = widget.selectedListItem?.categoryModel?.isIncome ?? true;
+        widget.selectedListItem?.categoryModel.transactionType ?? "";
+    isIncome.value = widget.selectedListItem?.categoryModel.isIncome ?? true;
     colorsValue =
-        widget.selectedListItem?.categoryModel?.colorsValue ?? Colors.red.value;
+        widget.selectedListItem?.categoryModel.colorsValue ?? Colors.red.value;
     super.initState();
   }
 
@@ -210,12 +209,6 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                             ),
                             onPressed: () {
                               if (categoryController.text != "") {
-                                // CategoryModelIsar categoryModelIsar =
-                                //     CategoryModelIsar()
-                                //       ..transactionType =
-                                //           categoryController.text
-                                //       ..colorsValue = colorsValue
-                                //       ..isIncome = isIncome.value ?? true;
                                 // TODO
                                 final model = CategoryModel(
                                     transactionType: categoryController.text,
@@ -226,9 +219,6 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                                         categoryModel: model);
                                 if (widget.editMode == false) {
                                   blocCategories.add(
-                                    // CategoryAddEvent(
-                                    //   categoryModelIsars: categoryModelIsar,
-                                    // ),
                                     CategoryAddEvent(
                                         categoryModelDriftCompanion:
                                             driftCompanion),
@@ -240,19 +230,8 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                                       transactionType: categoryController.text,
                                       isIncome: isIncome.value ?? true,
                                       colorsValue: colorsValue);
-                                  final categoryModelDriftData =
-                                      CategoryModelDriftData(
-                                          categoryModel: model);
+
                                   blocCategories.add(
-                                      // CategoryEditEvent(
-                                      //   selectedCategoryModelIsar:
-                                      //       widget.selectedListItem!,
-                                      //   selectedCategoryModelId:
-                                      //       widget.selectedListItem!.id,
-                                      //   transactionType: categoryController.text,
-                                      //   isIncome: isIncome.value ?? true,
-                                      //   colorsValue: colorsValue,
-                                      // ),
                                       CategoryEditEvent(categoryModel: model));
                                   context.pop();
                                 }

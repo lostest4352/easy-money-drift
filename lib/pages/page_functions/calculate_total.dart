@@ -6,7 +6,7 @@ import 'package:flutter_expense_tracker/database/drift_database.dart';
   int totalExpense = 0;
 
   for (final transactionItem in snapshot) {
-    if (transactionItem.categoryModel?.isIncome == true) {
+    if (transactionItem.categoryModel.isIncome == true) {
       totalIncome += transactionItem.amount;
     } else {
       totalExpense += transactionItem.amount;
@@ -22,7 +22,7 @@ import 'package:flutter_expense_tracker/database/drift_database.dart';
   int totalValue = 0;
 
   for (final transaction in transactionList) {
-    if (transaction.categoryModel?.isIncome == true) {
+    if (transaction.categoryModel.isIncome == true) {
       totalIncome += transaction.amount;
     } else {
       totalExpense -= transaction.amount;

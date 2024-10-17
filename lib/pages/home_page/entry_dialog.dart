@@ -218,19 +218,6 @@ class _EntryDialogState extends State<EntryDialog> {
                                       noteController.text.trim()),
                                   categoryModel: drift.Value(categoryModel!));
 
-                              //
-                              // TransactionModelIsar transactionModelIsar =
-                              //     TransactionModelIsar()
-                              //       ..amount = int.parse(amountController.text)
-                              //       ..dateTime = selectedDate.toString()
-                              //       ..note = (noteController.text.trim() == "")
-                              //           ? null
-                              //           : noteController.text.trim()
-                              //       //
-                              //       ..transactionType = transactionType ?? ""
-                              //       ..isIncome = isIncome ?? true
-                              //       ..colorsValue =
-                              //           colorsValue ?? Colors.red.value;
                               if (widget.editMode == false) {
                                 blocTransaction.add(
                                   TransactionsAddEvent(
@@ -249,21 +236,7 @@ class _EntryDialogState extends State<EntryDialog> {
                                   categoryModel: categoryModel!,
                                 );
                                 blocTransaction.add(TransactionsEditEvent(
-                                        transactionModelData: model)
-                                    // TransactionsEditEvent(
-                                    //   selectedTransactionModelId:
-                                    //       widget.transaction!.id,
-                                    //   amount: int.parse(amountController.text),
-                                    //   dateTime: selectedDate.toString(),
-                                    //   note: (noteController.text.trim() == "")
-                                    //       ? null
-                                    //       : noteController.text.trim(),
-                                    //   //
-                                    //   transactionType: transactionType!,
-                                    //   isIncome: isIncome!,
-                                    //   colorsValue: colorsValue!,
-                                    // ),
-                                    );
+                                    transactionModelData: model));
                               }
                             }
                             context.pop();
@@ -315,15 +288,6 @@ class _EntryDialogState extends State<EntryDialog> {
                                                     categoryModel =
                                                         categoryList[index]
                                                             .categoryModel;
-                                                    // transactionType =
-                                                    //     categoryList[index]
-                                                    //         .transactionType;
-                                                    // isIncome =
-                                                    //     categoryList[index]
-                                                    //         .isIncome;
-                                                    // colorsValue =
-                                                    //     categoryList[index]
-                                                    //         .colorsValue;
                                                   });
                                                   context.pop();
                                                 },
@@ -331,13 +295,13 @@ class _EntryDialogState extends State<EntryDialog> {
                                                 leading: CircleAvatar(
                                                   backgroundColor:
                                                       (categoryList[index]
-                                                                  .categoryModel!
+                                                                  .categoryModel
                                                                   .isIncome) ==
                                                               true
                                                           ? Colors.blue
                                                           : Colors.red,
                                                   child: (categoryList[index]
-                                                              .categoryModel!
+                                                              .categoryModel
                                                               .isIncome ==
                                                           true)
                                                       ? const Icon(
@@ -353,7 +317,7 @@ class _EntryDialogState extends State<EntryDialog> {
                                                 //
                                                 title: Text(
                                                   categoryList[index]
-                                                      .categoryModel!
+                                                      .categoryModel
                                                       .transactionType,
                                                 ),
                                               );

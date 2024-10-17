@@ -106,25 +106,22 @@ class _ExpenseCategoriesState extends State<ExpenseCategories> {
                       child: ListTile(
                         leading: CircleAvatar(
                           backgroundColor:
-                              categoryList[index].categoryModel?.isIncome ==
-                                      true
+                              categoryList[index].categoryModel.isIncome == true
                                   ? Colors.blue
                                   : Colors.red,
-                          child: categoryList[index].categoryModel?.isIncome ==
-                                  true
-                              ? const Icon(
-                                  Icons.addchart,
-                                  color: Colors.white,
-                                )
-                              : const Icon(
-                                  Icons.highlight_remove_sharp,
-                                  color: Colors.white,
-                                ),
+                          child:
+                              categoryList[index].categoryModel.isIncome == true
+                                  ? const Icon(
+                                      Icons.addchart,
+                                      color: Colors.white,
+                                    )
+                                  : const Icon(
+                                      Icons.highlight_remove_sharp,
+                                      color: Colors.white,
+                                    ),
                         ),
                         title: Text(
-                          categoryList[index].categoryModel?.transactionType ??
-                              "error here", // TODO
-                        ),
+                            categoryList[index].categoryModel.transactionType),
                       ),
                     );
                   },
