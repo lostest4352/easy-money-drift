@@ -18,14 +18,12 @@ class TransactionModelDrift extends Table {
   IntColumn get amount => integer()();
   TextColumn get note => text().nullable()();
   //
-  TextColumn get categoryModel =>
-      text().map(const CategoryConverter()).nullable()();
+  TextColumn get categoryModel => text().map(const CategoryConverter())();
 }
 
 class CategoryModelDrift extends Table {
   //
-  TextColumn get categoryModel =>
-      text().map(const CategoryConverter()).nullable()();
+  TextColumn get categoryModel => text().map(const CategoryConverter())();
 }
 
 @DriftDatabase(tables: [TransactionModelDrift, CategoryModelDrift])
@@ -112,22 +110,26 @@ class AppDatabase extends _$AppDatabase {
   }
 
   // TODO
-  Future<int> editCategory(
-      CategoryModelDriftData categoryModelDriftData) async {
+  Future<int> editCategory(CategoryModel categoryModel) async {
     //
     // returns only the transactionqueries that doesnt have the selected category model
     final ifNotExist = notExistsQuery(select(transactionModelDrift)
-      ..where((row) =>
-          row.categoryModel.equalsValue(categoryModelDriftData.categoryModel)));
+      ..where((row) => row.categoryModel.equalsValue(categoryModel)));
 
-    // update only the category models that doesnt exist on transaction table
-    final editEntry = (update(categoryModelDrift)..where((val) => ifNotExist))
-        .write(CategoryModelDriftCompanion(
-            categoryModel: Value(categoryModelDriftData.categoryModel)));
-    //
-    final intValue = await editEntry;
-    debugPrint(intValue.toString());
-    return editEntry;
+    final editValue = (update(categoryModelDrift)
+          ..where((val) {
+            // TODO here
+            debugPrint(val.categoryModel.toString());
+            debugPrint(categoryModel.toString());
+            return ifNotExist & val.categoryModel.equalsValue(categoryModel);
+          }))
+        .write(
+            CategoryModelDriftCompanion(categoryModel: Value(categoryModel)));
+
+    // TODO
+    final editval = await editValue;
+    debugPrint(editval.toString());
+    return editValue;
   }
 
   // TODO

@@ -34,7 +34,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     });
 
     on<CategoryEditEvent>((event, emit) async {
-      appDatabase.editCategory(event.categoryModelDriftData);
+      appDatabase.editCategory(event.categoryModel);
     });
 
     on<CategoryDeleteEvent>((event, emit) async {
@@ -48,84 +48,66 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
 
   final defaultCategoryItems = [
     CategoryModelDriftCompanion.insert(
-      categoryModel: Value.absentIfNull(
-        CategoryModel(
-          transactionType: "Clothing",
-          isIncome: false,
-          colorsValue: purpleColor.colorsValue,
-        ),
+      categoryModel: CategoryModel(
+        transactionType: "Clothing",
+        isIncome: false,
+        colorsValue: purpleColor.colorsValue,
       ),
     ),
     CategoryModelDriftCompanion.insert(
-      categoryModel: Value.absentIfNull(
-        CategoryModel(
-          transactionType: "Entertainment",
-          isIncome: false,
-          colorsValue: redColor.colorsValue,
-        ),
+      categoryModel: CategoryModel(
+        transactionType: "Entertainment",
+        isIncome: false,
+        colorsValue: redColor.colorsValue,
       ),
     ),
     CategoryModelDriftCompanion.insert(
-      categoryModel: Value.absentIfNull(
-        CategoryModel(
-          transactionType: "Health",
-          isIncome: false,
-          colorsValue: blueColor.colorsValue,
-        ),
+      categoryModel: CategoryModel(
+        transactionType: "Health",
+        isIncome: false,
+        colorsValue: blueColor.colorsValue,
       ),
     ),
     CategoryModelDriftCompanion.insert(
-      categoryModel: Value.absentIfNull(
-        CategoryModel(
-          transactionType: "Fuel",
-          isIncome: false,
-          colorsValue: yellowColor.colorsValue,
-        ),
+      categoryModel: CategoryModel(
+        transactionType: "Fuel",
+        isIncome: false,
+        colorsValue: yellowColor.colorsValue,
       ),
     ),
     CategoryModelDriftCompanion.insert(
-      categoryModel: Value.absentIfNull(
-        CategoryModel(
-          transactionType: "Food",
-          isIncome: false,
-          colorsValue: greenColor.colorsValue,
-        ),
+      categoryModel: CategoryModel(
+        transactionType: "Food",
+        isIncome: false,
+        colorsValue: greenColor.colorsValue,
       ),
     ),
     CategoryModelDriftCompanion.insert(
-      categoryModel: Value.absentIfNull(
-        CategoryModel(
-          transactionType: "Salary",
-          isIncome: true,
-          colorsValue: blueColor.colorsValue,
-        ),
+      categoryModel: CategoryModel(
+        transactionType: "Salary",
+        isIncome: true,
+        colorsValue: blueColor.colorsValue,
       ),
     ),
     CategoryModelDriftCompanion.insert(
-      categoryModel: Value.absentIfNull(
-        CategoryModel(
-          transactionType: "Bonus",
-          isIncome: true,
-          colorsValue: redColor.colorsValue,
-        ),
+      categoryModel: CategoryModel(
+        transactionType: "Bonus",
+        isIncome: true,
+        colorsValue: redColor.colorsValue,
       ),
     ),
     CategoryModelDriftCompanion.insert(
-      categoryModel: Value.absentIfNull(
-        CategoryModel(
-          transactionType: "Wages",
-          isIncome: true,
-          colorsValue: greenColor.colorsValue,
-        ),
+      categoryModel: CategoryModel(
+        transactionType: "Wages",
+        isIncome: true,
+        colorsValue: greenColor.colorsValue,
       ),
     ),
     CategoryModelDriftCompanion.insert(
-      categoryModel: Value.absentIfNull(
-        CategoryModel(
-          transactionType: "Gifts",
-          isIncome: true,
-          colorsValue: purpleColor.colorsValue,
-        ),
+      categoryModel: CategoryModel(
+        transactionType: "Gifts",
+        isIncome: true,
+        colorsValue: purpleColor.colorsValue,
       ),
     ),
   ];

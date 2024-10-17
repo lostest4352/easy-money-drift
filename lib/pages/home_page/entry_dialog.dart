@@ -216,7 +216,7 @@ class _EntryDialogState extends State<EntryDialog> {
                                       drift.Value(selectedDate.toString()),
                                   note: drift.Value.absentIfNull(
                                       noteController.text.trim()),
-                                  categoryModel: drift.Value(categoryModel));
+                                  categoryModel: drift.Value(categoryModel!));
 
                               //
                               // TransactionModelIsar transactionModelIsar =
@@ -246,7 +246,7 @@ class _EntryDialogState extends State<EntryDialog> {
                                           noteController.text.isEmpty
                                       ? noteController.text.trim()
                                       : null,
-                                  categoryModel: categoryModel,
+                                  categoryModel: categoryModel!,
                                 );
                                 blocTransaction.add(TransactionsEditEvent(
                                         transactionModelData: model)

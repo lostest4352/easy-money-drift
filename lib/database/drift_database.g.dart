@@ -37,12 +37,12 @@ class $TransactionModelDriftTable extends TransactionModelDrift
   static const VerificationMeta _categoryModelMeta =
       const VerificationMeta('categoryModel');
   @override
-  late final GeneratedColumnWithTypeConverter<CategoryModel?, String>
+  late final GeneratedColumnWithTypeConverter<CategoryModel, String>
       categoryModel = GeneratedColumn<String>(
-              'category_model', aliasedName, true,
-              type: DriftSqlType.string, requiredDuringInsert: false)
-          .withConverter<CategoryModel?>(
-              $TransactionModelDriftTable.$convertercategoryModeln);
+              'category_model', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<CategoryModel>(
+              $TransactionModelDriftTable.$convertercategoryModel);
   @override
   List<GeneratedColumn> get $columns =>
       [id, dateAndTime, amount, note, categoryModel];
@@ -97,9 +97,9 @@ class $TransactionModelDriftTable extends TransactionModelDrift
           .read(DriftSqlType.int, data['${effectivePrefix}amount'])!,
       note: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}note']),
-      categoryModel: $TransactionModelDriftTable.$convertercategoryModeln
+      categoryModel: $TransactionModelDriftTable.$convertercategoryModel
           .fromSql(attachedDatabase.typeMapping.read(
-              DriftSqlType.string, data['${effectivePrefix}category_model'])),
+              DriftSqlType.string, data['${effectivePrefix}category_model'])!),
     );
   }
 
@@ -110,9 +110,6 @@ class $TransactionModelDriftTable extends TransactionModelDrift
 
   static JsonTypeConverter2<CategoryModel, String, String>
       $convertercategoryModel = const CategoryConverter();
-  static JsonTypeConverter2<CategoryModel?, String?, String?>
-      $convertercategoryModeln =
-      JsonTypeConverter2.asNullable($convertercategoryModel);
 }
 
 class TransactionModelDriftData extends DataClass
@@ -121,13 +118,13 @@ class TransactionModelDriftData extends DataClass
   final String dateAndTime;
   final int amount;
   final String? note;
-  final CategoryModel? categoryModel;
+  final CategoryModel categoryModel;
   const TransactionModelDriftData(
       {required this.id,
       required this.dateAndTime,
       required this.amount,
       this.note,
-      this.categoryModel});
+      required this.categoryModel});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -137,9 +134,9 @@ class TransactionModelDriftData extends DataClass
     if (!nullToAbsent || note != null) {
       map['note'] = Variable<String>(note);
     }
-    if (!nullToAbsent || categoryModel != null) {
+    {
       map['category_model'] = Variable<String>($TransactionModelDriftTable
-          .$convertercategoryModeln
+          .$convertercategoryModel
           .toSql(categoryModel));
     }
     return map;
@@ -151,9 +148,7 @@ class TransactionModelDriftData extends DataClass
       dateAndTime: Value(dateAndTime),
       amount: Value(amount),
       note: note == null && nullToAbsent ? const Value.absent() : Value(note),
-      categoryModel: categoryModel == null && nullToAbsent
-          ? const Value.absent()
-          : Value(categoryModel),
+      categoryModel: Value(categoryModel),
     );
   }
 
@@ -165,8 +160,8 @@ class TransactionModelDriftData extends DataClass
       dateAndTime: serializer.fromJson<String>(json['dateAndTime']),
       amount: serializer.fromJson<int>(json['amount']),
       note: serializer.fromJson<String?>(json['note']),
-      categoryModel: $TransactionModelDriftTable.$convertercategoryModeln
-          .fromJson(serializer.fromJson<String?>(json['categoryModel'])),
+      categoryModel: $TransactionModelDriftTable.$convertercategoryModel
+          .fromJson(serializer.fromJson<String>(json['categoryModel'])),
     );
   }
   @override
@@ -177,8 +172,8 @@ class TransactionModelDriftData extends DataClass
       'dateAndTime': serializer.toJson<String>(dateAndTime),
       'amount': serializer.toJson<int>(amount),
       'note': serializer.toJson<String?>(note),
-      'categoryModel': serializer.toJson<String?>($TransactionModelDriftTable
-          .$convertercategoryModeln
+      'categoryModel': serializer.toJson<String>($TransactionModelDriftTable
+          .$convertercategoryModel
           .toJson(categoryModel)),
     };
   }
@@ -188,14 +183,13 @@ class TransactionModelDriftData extends DataClass
           String? dateAndTime,
           int? amount,
           Value<String?> note = const Value.absent(),
-          Value<CategoryModel?> categoryModel = const Value.absent()}) =>
+          CategoryModel? categoryModel}) =>
       TransactionModelDriftData(
         id: id ?? this.id,
         dateAndTime: dateAndTime ?? this.dateAndTime,
         amount: amount ?? this.amount,
         note: note.present ? note.value : this.note,
-        categoryModel:
-            categoryModel.present ? categoryModel.value : this.categoryModel,
+        categoryModel: categoryModel ?? this.categoryModel,
       );
   TransactionModelDriftData copyWithCompanion(
       TransactionModelDriftCompanion data) {
@@ -242,7 +236,7 @@ class TransactionModelDriftCompanion
   final Value<String> dateAndTime;
   final Value<int> amount;
   final Value<String?> note;
-  final Value<CategoryModel?> categoryModel;
+  final Value<CategoryModel> categoryModel;
   const TransactionModelDriftCompanion({
     this.id = const Value.absent(),
     this.dateAndTime = const Value.absent(),
@@ -255,9 +249,10 @@ class TransactionModelDriftCompanion
     required String dateAndTime,
     required int amount,
     this.note = const Value.absent(),
-    this.categoryModel = const Value.absent(),
+    required CategoryModel categoryModel,
   })  : dateAndTime = Value(dateAndTime),
-        amount = Value(amount);
+        amount = Value(amount),
+        categoryModel = Value(categoryModel);
   static Insertable<TransactionModelDriftData> custom({
     Expression<int>? id,
     Expression<String>? dateAndTime,
@@ -279,7 +274,7 @@ class TransactionModelDriftCompanion
       Value<String>? dateAndTime,
       Value<int>? amount,
       Value<String?>? note,
-      Value<CategoryModel?>? categoryModel}) {
+      Value<CategoryModel>? categoryModel}) {
     return TransactionModelDriftCompanion(
       id: id ?? this.id,
       dateAndTime: dateAndTime ?? this.dateAndTime,
@@ -306,7 +301,7 @@ class TransactionModelDriftCompanion
     }
     if (categoryModel.present) {
       map['category_model'] = Variable<String>($TransactionModelDriftTable
-          .$convertercategoryModeln
+          .$convertercategoryModel
           .toSql(categoryModel.value));
     }
     return map;
@@ -334,12 +329,12 @@ class $CategoryModelDriftTable extends CategoryModelDrift
   static const VerificationMeta _categoryModelMeta =
       const VerificationMeta('categoryModel');
   @override
-  late final GeneratedColumnWithTypeConverter<CategoryModel?, String>
+  late final GeneratedColumnWithTypeConverter<CategoryModel, String>
       categoryModel = GeneratedColumn<String>(
-              'category_model', aliasedName, true,
-              type: DriftSqlType.string, requiredDuringInsert: false)
-          .withConverter<CategoryModel?>(
-              $CategoryModelDriftTable.$convertercategoryModeln);
+              'category_model', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<CategoryModel>(
+              $CategoryModelDriftTable.$convertercategoryModel);
   @override
   List<GeneratedColumn> get $columns => [categoryModel];
   @override
@@ -363,9 +358,9 @@ class $CategoryModelDriftTable extends CategoryModelDrift
   CategoryModelDriftData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return CategoryModelDriftData(
-      categoryModel: $CategoryModelDriftTable.$convertercategoryModeln.fromSql(
+      categoryModel: $CategoryModelDriftTable.$convertercategoryModel.fromSql(
           attachedDatabase.typeMapping.read(
-              DriftSqlType.string, data['${effectivePrefix}category_model'])),
+              DriftSqlType.string, data['${effectivePrefix}category_model'])!),
     );
   }
 
@@ -376,21 +371,18 @@ class $CategoryModelDriftTable extends CategoryModelDrift
 
   static JsonTypeConverter2<CategoryModel, String, String>
       $convertercategoryModel = const CategoryConverter();
-  static JsonTypeConverter2<CategoryModel?, String?, String?>
-      $convertercategoryModeln =
-      JsonTypeConverter2.asNullable($convertercategoryModel);
 }
 
 class CategoryModelDriftData extends DataClass
     implements Insertable<CategoryModelDriftData> {
-  final CategoryModel? categoryModel;
-  const CategoryModelDriftData({this.categoryModel});
+  final CategoryModel categoryModel;
+  const CategoryModelDriftData({required this.categoryModel});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || categoryModel != null) {
+    {
       map['category_model'] = Variable<String>($CategoryModelDriftTable
-          .$convertercategoryModeln
+          .$convertercategoryModel
           .toSql(categoryModel));
     }
     return map;
@@ -398,9 +390,7 @@ class CategoryModelDriftData extends DataClass
 
   CategoryModelDriftCompanion toCompanion(bool nullToAbsent) {
     return CategoryModelDriftCompanion(
-      categoryModel: categoryModel == null && nullToAbsent
-          ? const Value.absent()
-          : Value(categoryModel),
+      categoryModel: Value(categoryModel),
     );
   }
 
@@ -408,25 +398,23 @@ class CategoryModelDriftData extends DataClass
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return CategoryModelDriftData(
-      categoryModel: $CategoryModelDriftTable.$convertercategoryModeln
-          .fromJson(serializer.fromJson<String?>(json['categoryModel'])),
+      categoryModel: $CategoryModelDriftTable.$convertercategoryModel
+          .fromJson(serializer.fromJson<String>(json['categoryModel'])),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'categoryModel': serializer.toJson<String?>($CategoryModelDriftTable
-          .$convertercategoryModeln
+      'categoryModel': serializer.toJson<String>($CategoryModelDriftTable
+          .$convertercategoryModel
           .toJson(categoryModel)),
     };
   }
 
-  CategoryModelDriftData copyWith(
-          {Value<CategoryModel?> categoryModel = const Value.absent()}) =>
+  CategoryModelDriftData copyWith({CategoryModel? categoryModel}) =>
       CategoryModelDriftData(
-        categoryModel:
-            categoryModel.present ? categoryModel.value : this.categoryModel,
+        categoryModel: categoryModel ?? this.categoryModel,
       );
   CategoryModelDriftData copyWithCompanion(CategoryModelDriftCompanion data) {
     return CategoryModelDriftData(
@@ -455,16 +443,16 @@ class CategoryModelDriftData extends DataClass
 
 class CategoryModelDriftCompanion
     extends UpdateCompanion<CategoryModelDriftData> {
-  final Value<CategoryModel?> categoryModel;
+  final Value<CategoryModel> categoryModel;
   final Value<int> rowid;
   const CategoryModelDriftCompanion({
     this.categoryModel = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   CategoryModelDriftCompanion.insert({
-    this.categoryModel = const Value.absent(),
+    required CategoryModel categoryModel,
     this.rowid = const Value.absent(),
-  });
+  }) : categoryModel = Value(categoryModel);
   static Insertable<CategoryModelDriftData> custom({
     Expression<String>? categoryModel,
     Expression<int>? rowid,
@@ -476,7 +464,7 @@ class CategoryModelDriftCompanion
   }
 
   CategoryModelDriftCompanion copyWith(
-      {Value<CategoryModel?>? categoryModel, Value<int>? rowid}) {
+      {Value<CategoryModel>? categoryModel, Value<int>? rowid}) {
     return CategoryModelDriftCompanion(
       categoryModel: categoryModel ?? this.categoryModel,
       rowid: rowid ?? this.rowid,
@@ -488,7 +476,7 @@ class CategoryModelDriftCompanion
     final map = <String, Expression>{};
     if (categoryModel.present) {
       map['category_model'] = Variable<String>($CategoryModelDriftTable
-          .$convertercategoryModeln
+          .$convertercategoryModel
           .toSql(categoryModel.value));
     }
     if (rowid.present) {
@@ -528,7 +516,7 @@ typedef $$TransactionModelDriftTableCreateCompanionBuilder
   required String dateAndTime,
   required int amount,
   Value<String?> note,
-  Value<CategoryModel?> categoryModel,
+  required CategoryModel categoryModel,
 });
 typedef $$TransactionModelDriftTableUpdateCompanionBuilder
     = TransactionModelDriftCompanion Function({
@@ -536,7 +524,7 @@ typedef $$TransactionModelDriftTableUpdateCompanionBuilder
   Value<String> dateAndTime,
   Value<int> amount,
   Value<String?> note,
-  Value<CategoryModel?> categoryModel,
+  Value<CategoryModel> categoryModel,
 });
 
 class $$TransactionModelDriftTableFilterComposer
@@ -560,7 +548,7 @@ class $$TransactionModelDriftTableFilterComposer
   ColumnFilters<String> get note => $composableBuilder(
       column: $table.note, builder: (column) => ColumnFilters(column));
 
-  ColumnWithTypeConverterFilters<CategoryModel?, CategoryModel, String>
+  ColumnWithTypeConverterFilters<CategoryModel, CategoryModel, String>
       get categoryModel => $composableBuilder(
           column: $table.categoryModel,
           builder: (column) => ColumnWithTypeConverterFilters(column));
@@ -613,7 +601,7 @@ class $$TransactionModelDriftTableAnnotationComposer
   GeneratedColumn<String> get note =>
       $composableBuilder(column: $table.note, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<CategoryModel?, String> get categoryModel =>
+  GeneratedColumnWithTypeConverter<CategoryModel, String> get categoryModel =>
       $composableBuilder(
           column: $table.categoryModel, builder: (column) => column);
 }
@@ -653,7 +641,7 @@ class $$TransactionModelDriftTableTableManager extends RootTableManager<
             Value<String> dateAndTime = const Value.absent(),
             Value<int> amount = const Value.absent(),
             Value<String?> note = const Value.absent(),
-            Value<CategoryModel?> categoryModel = const Value.absent(),
+            Value<CategoryModel> categoryModel = const Value.absent(),
           }) =>
               TransactionModelDriftCompanion(
             id: id,
@@ -667,7 +655,7 @@ class $$TransactionModelDriftTableTableManager extends RootTableManager<
             required String dateAndTime,
             required int amount,
             Value<String?> note = const Value.absent(),
-            Value<CategoryModel?> categoryModel = const Value.absent(),
+            required CategoryModel categoryModel,
           }) =>
               TransactionModelDriftCompanion.insert(
             id: id,
@@ -702,12 +690,12 @@ typedef $$TransactionModelDriftTableProcessedTableManager
         PrefetchHooks Function()>;
 typedef $$CategoryModelDriftTableCreateCompanionBuilder
     = CategoryModelDriftCompanion Function({
-  Value<CategoryModel?> categoryModel,
+  required CategoryModel categoryModel,
   Value<int> rowid,
 });
 typedef $$CategoryModelDriftTableUpdateCompanionBuilder
     = CategoryModelDriftCompanion Function({
-  Value<CategoryModel?> categoryModel,
+  Value<CategoryModel> categoryModel,
   Value<int> rowid,
 });
 
@@ -720,7 +708,7 @@ class $$CategoryModelDriftTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnWithTypeConverterFilters<CategoryModel?, CategoryModel, String>
+  ColumnWithTypeConverterFilters<CategoryModel, CategoryModel, String>
       get categoryModel => $composableBuilder(
           column: $table.categoryModel,
           builder: (column) => ColumnWithTypeConverterFilters(column));
@@ -749,7 +737,7 @@ class $$CategoryModelDriftTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumnWithTypeConverter<CategoryModel?, String> get categoryModel =>
+  GeneratedColumnWithTypeConverter<CategoryModel, String> get categoryModel =>
       $composableBuilder(
           column: $table.categoryModel, builder: (column) => column);
 }
@@ -783,7 +771,7 @@ class $$CategoryModelDriftTableTableManager extends RootTableManager<
               $$CategoryModelDriftTableAnnotationComposer(
                   $db: db, $table: table),
           updateCompanionCallback: ({
-            Value<CategoryModel?> categoryModel = const Value.absent(),
+            Value<CategoryModel> categoryModel = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
               CategoryModelDriftCompanion(
@@ -791,7 +779,7 @@ class $$CategoryModelDriftTableTableManager extends RootTableManager<
             rowid: rowid,
           ),
           createCompanionCallback: ({
-            Value<CategoryModel?> categoryModel = const Value.absent(),
+            required CategoryModel categoryModel,
             Value<int> rowid = const Value.absent(),
           }) =>
               CategoryModelDriftCompanion.insert(

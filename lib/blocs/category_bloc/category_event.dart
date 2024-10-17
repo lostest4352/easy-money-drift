@@ -12,9 +12,9 @@ final class CategoryAddEvent extends CategoryEvent {
 }
 
 final class CategoryEditEvent extends CategoryEvent {
-  final CategoryModelDriftData categoryModelDriftData;
+  final CategoryModel categoryModel;
 
-  CategoryEditEvent({required this.categoryModelDriftData});
+  CategoryEditEvent({required this.categoryModel});
 }
 
 final class CategoryDeleteEvent extends CategoryEvent {

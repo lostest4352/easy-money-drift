@@ -223,8 +223,7 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                                     colorsValue: colorsValue);
                                 final driftCompanion =
                                     CategoryModelDriftCompanion.insert(
-                                        categoryModel:
-                                            drift.Value.absentIfNull(model));
+                                        categoryModel: model);
                                 if (widget.editMode == false) {
                                   blocCategories.add(
                                     // CategoryAddEvent(
@@ -254,9 +253,7 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                                       //   isIncome: isIncome.value ?? true,
                                       //   colorsValue: colorsValue,
                                       // ),
-                                      CategoryEditEvent(
-                                          categoryModelDriftData:
-                                              categoryModelDriftData));
+                                      CategoryEditEvent(categoryModel: model));
                                   context.pop();
                                 }
                               }
