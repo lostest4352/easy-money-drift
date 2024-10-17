@@ -215,9 +215,7 @@ class _EntryDialogState extends State<EntryDialog> {
                                   dateAndTime:
                                       drift.Value(selectedDate.toString()),
                                   note: drift.Value.absentIfNull(
-                                      (noteController.text.trim() == "")
-                                          ? null
-                                          : noteController.text.trim()),
+                                      noteController.text.trim()),
                                   categoryModel: drift.Value(categoryModel));
 
                               //
@@ -244,9 +242,7 @@ class _EntryDialogState extends State<EntryDialog> {
                                   id: widget.transaction!.id,
                                   amount: int.parse(amountController.text),
                                   dateAndTime: selectedDate.toString(),
-                                  note: (noteController.text.trim() == "")
-                                      ? null
-                                      : noteController.text.trim(),
+                                  note: noteController.text.trim(),
                                   categoryModel: categoryModel,
                                 );
                                 blocTransaction.add(TransactionsEditEvent(
