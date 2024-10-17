@@ -242,7 +242,10 @@ class _EntryDialogState extends State<EntryDialog> {
                                   id: widget.transaction!.id,
                                   amount: int.parse(amountController.text),
                                   dateAndTime: selectedDate.toString(),
-                                  note: noteController.text.trim(),
+                                  note: noteController.text != "".trim() ||
+                                          noteController.text.isEmpty
+                                      ? noteController.text.trim()
+                                      : null,
                                   categoryModel: categoryModel,
                                 );
                                 blocTransaction.add(TransactionsEditEvent(

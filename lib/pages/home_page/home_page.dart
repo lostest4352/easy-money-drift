@@ -195,8 +195,8 @@ class _HomePageState extends State<HomePage> {
                 //
                 final transactionsList = state.listOfTransactionData;
 
-                transactionsList
-                    ?.sort((a, b) => b.dateAndTime.compareTo(a.dateAndTime));
+                // transactionsList
+                //     ?.sort((a, b) => b.dateAndTime.compareTo(a.dateAndTime));
 
                 // Code for sorting ascending/descending
                 // snapshot.data!.sort((a, b) => a.dateTime.compareTo(b.dateTime));

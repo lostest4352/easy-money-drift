@@ -88,23 +88,24 @@ class TransactionView extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: () {
-                        if (transaction.note != null) {
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 8, right: 8),
-                            child: Column(
-                              children: [
-                                Text(
-                                  "${transaction.note}",
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
-                                  maxLines: 1,
-                                ),
-                              ],
-                            ),
-                          );
-                        } else {
+                        if (transaction.note == '' ||
+                            transaction.note == null) {
                           return const SizedBox();
                         }
+
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 8, right: 8),
+                          child: Column(
+                            children: [
+                              Text(
+                                "${transaction.note}",
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                        );
                       }(),
                     ),
                   ),
