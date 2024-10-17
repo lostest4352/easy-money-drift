@@ -7,15 +7,15 @@ class PopupTextFieldItems extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final Widget? suffixIcon;
   final String hintText;
-  
+
   const PopupTextFieldItems({
-    Key? key,
+    super.key,
     required this.textEditingController,
     this.keyboardType,
     this.inputFormatters,
     this.suffixIcon,
     required this.hintText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +46,3 @@ class PopupTextFieldItems extends StatelessWidget {
     );
   }
 }
-
-
-

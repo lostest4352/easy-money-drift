@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class PopupTextFieldTitle extends StatelessWidget {
   final String title;
   const PopupTextFieldTitle({
-    Key? key,
+    super.key,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

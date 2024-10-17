@@ -4,10 +4,10 @@ class HomePageTotalBar extends StatelessWidget {
   final int income;
   final int expenses;
   const HomePageTotalBar({
-    Key? key,
+    super.key,
     required this.income,
     required this.expenses,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

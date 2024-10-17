@@ -12,9 +12,9 @@ import 'package:flutter_expense_tracker/pages/widgets/popup_category_items.dart'
 class CustomDateDialog extends StatefulWidget {
   final ValueNotifier<bool> bottomOpen;
   const CustomDateDialog({
-    Key? key,
+    super.key,
     required this.bottomOpen,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomDateDialog> createState() => _CustomDateDialogState();

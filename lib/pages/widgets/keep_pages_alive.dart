@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class KeepPagesAlive extends StatefulWidget {
   final Widget child;
   const KeepPagesAlive({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   State<KeepPagesAlive> createState() => _KeepPageAliveState();
