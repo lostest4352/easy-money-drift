@@ -80,6 +80,7 @@ class AppDatabase extends _$AppDatabase {
 
   Future<int> createOrUpdateTransaction(
       TransactionModelDriftData transactionModelData) {
+    //
     final updateEntry = into(transactionModelDrift)
         .insertOnConflictUpdate(transactionModelData);
     return updateEntry;
@@ -110,15 +111,32 @@ class AppDatabase extends _$AppDatabase {
 
   // TODO
   Future<int> editCategory(CategoryModelDriftData categoryModelDriftData) {
-    final editEntry =
-        into(categoryModelDrift).insertOnConflictUpdate(categoryModelDriftData);
+    //
+    // returns only the transactionqueries that doesnt have the selected category model
+    final ifNotExist = notExistsQuery(select(transactionModelDrift)
+      ..where((row) =>
+          row.categoryModel.equalsValue(categoryModelDriftData.categoryModel)));
+
+    // update only the category models that doesnt exist on transaction table
+    final editEntry = (update(categoryModelDrift)..where((val) => ifNotExist))
+        .write(CategoryModelDriftCompanion(
+            categoryModel: Value(categoryModelDriftData.categoryModel)));
+    //
+    // final editEntry =
+    //     into(categoryModelDrift).insertOnConflictUpdate(categoryModelDriftData);
     return editEntry;
   }
 
   // TODO
   Future<int> deleteCategory(CategoryModel categoryModel) {
+    //
+    // returns only the transactionqueries that doesnt have the selected category model
+    final ifNotExist = notExistsQuery(select(transactionModelDrift)
+      ..where((row) => row.categoryModel.equalsValue(categoryModel)));
+    //
     final deleteEntry = (delete(categoryModelDrift)
-          ..where((tbl) => tbl.categoryModel.equalsValue(categoryModel)))
+          ..where((tbl) =>
+              ifNotExist & tbl.categoryModel.equalsValue(categoryModel)))
         .go();
     return deleteEntry;
   }
