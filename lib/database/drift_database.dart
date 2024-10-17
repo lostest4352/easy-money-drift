@@ -110,7 +110,8 @@ class AppDatabase extends _$AppDatabase {
   }
 
   // TODO
-  Future<int> editCategory(CategoryModelDriftData categoryModelDriftData) {
+  Future<int> editCategory(
+      CategoryModelDriftData categoryModelDriftData) async {
     //
     // returns only the transactionqueries that doesnt have the selected category model
     final ifNotExist = notExistsQuery(select(transactionModelDrift)
@@ -122,22 +123,24 @@ class AppDatabase extends _$AppDatabase {
         .write(CategoryModelDriftCompanion(
             categoryModel: Value(categoryModelDriftData.categoryModel)));
     //
-    // final editEntry =
-    //     into(categoryModelDrift).insertOnConflictUpdate(categoryModelDriftData);
+    final intValue = await editEntry;
+    debugPrint(intValue.toString());
     return editEntry;
   }
 
   // TODO
-  Future<int> deleteCategory(CategoryModel categoryModel) {
+  Future<int> deleteCategory(CategoryModel categoryModel) async {
     //
     // returns only the transactionqueries that doesnt have the selected category model
     final ifNotExist = notExistsQuery(select(transactionModelDrift)
       ..where((row) => row.categoryModel.equalsValue(categoryModel)));
-    //
+    // delete only the category models that doesnt exist on transaction table
     final deleteEntry = (delete(categoryModelDrift)
           ..where((tbl) =>
               ifNotExist & tbl.categoryModel.equalsValue(categoryModel)))
         .go();
+    final intValue = await deleteEntry;
+    debugPrint(intValue.toString());
     return deleteEntry;
   }
 
