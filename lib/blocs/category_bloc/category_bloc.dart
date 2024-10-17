@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expense_tracker/database/categories.dart';
 import 'package:flutter_expense_tracker/database/drift_database.dart';
 import 'package:flutter_expense_tracker/global_variables/dropdown_colors.dart';
 
@@ -28,108 +30,142 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     });
 
     on<CategoryAddEvent>((event, emit) async {
-      final Isar isar = await isarService.isarDB;
-      await isar.writeTxn(() async {
-        await isar.categoryModelIsars.put(event.categoryModelIsars);
-        // emit(state.copyWith(snackBarStatus: SnackBarStatus.isNotShown));
-      }).onError((error, stackTrace) {
-        debugPrint(error.toString());
-      });
+      appDatabase.addCategory(event.categoryModelDriftCompanion);
     });
 
     on<CategoryEditEvent>((event, emit) async {
-      final isar = await isarService.isarDB;
-      final selectedCategoryModel =
-          await isar.categoryModelIsars.get(event.selectedCategoryModelId);
-      selectedCategoryModel?.transactionType = event.transactionType;
-      selectedCategoryModel?.isIncome = event.isIncome;
-      selectedCategoryModel?.colorsValue = event.colorsValue;
-      await isar.writeTxn(() async {
-        final filteredTransactionModelList = await isar.transactionModelIsars
-            .where()
-            .filter()
-            .transactionTypeEqualTo(
-                event.selectedCategoryModelIsar.transactionType)
-            .findAll();
-        if (filteredTransactionModelList.isEmpty) {
-          if (selectedCategoryModel != null) {
-            await isar.categoryModelIsars.put(selectedCategoryModel);
-            // emit(state.copyWith(snackBarStatus: SnackBarStatus.isNotShown));
-          }
-        } else {
-          emit(state.copyWith(snackBarStatus: SnackBarStatus.isShown));
-          await Future.delayed(Duration.zero);
-          emit(state.copyWith(snackBarStatus: SnackBarStatus.isNotShown));
-        }
-      });
+      appDatabase.editCategory(event.categoryModelDriftData);
     });
 
     on<CategoryDeleteEvent>((event, emit) async {
-      final isar = await isarService.isarDB;
-      await isar.writeTxn(() async {
-        final filteredTransactionModelList = await isar.transactionModelIsars
-            .where()
-            .filter()
-            .transactionTypeEqualTo(
-                event.selectedCategoryModelIsar.transactionType)
-            .findAll();
-        if (filteredTransactionModelList.isEmpty) {
-          await isar.categoryModelIsars
-              .delete(event.selectedCategoryModelIsar.id);
-          // emit(state.copyWith(snackBarStatus: SnackBarStatus.isNotShown));
-        } else {
-          emit(state.copyWith(snackBarStatus: SnackBarStatus.isShown));
-          await Future.delayed(Duration.zero);
-          emit(state.copyWith(snackBarStatus: SnackBarStatus.isNotShown));
-        }
-      });
+      appDatabase.deleteCategory(event.categoryModel);
     });
 
     on<CategoryAddDefaultItemsEvent>((event, emit) async {
-      final isar = await isarService.isarDB;
-      await isar.writeTxn(() async {
-        await isar.categoryModelIsars.putAll(defaultListItems);
-        // emit(state.copyWith(snackBarStatus: SnackBarStatus.isNotShown));
-      });
+      appDatabase.addDefaultItems(defaultCategoryItems);
     });
   }
 
-  final defaultListItems = [
-    CategoryModelIsar()
-      ..transactionType = "Clothing"
-      ..isIncome = false
-      ..colorsValue = purpleColor.colorsValue,
-    CategoryModelIsar()
-      ..transactionType = "Entertainment"
-      ..isIncome = false
-      ..colorsValue = redColor.colorsValue,
-    CategoryModelIsar()
-      ..transactionType = "Health"
-      ..isIncome = false
-      ..colorsValue = blueColor.colorsValue,
-    CategoryModelIsar()
-      ..transactionType = "Fuel"
-      ..isIncome = false
-      ..colorsValue = yellowColor.colorsValue,
-    CategoryModelIsar()
-      ..transactionType = "Food"
-      ..isIncome = false
-      ..colorsValue = greenColor.colorsValue,
-    CategoryModelIsar()
-      ..transactionType = "Salary"
-      ..isIncome = true
-      ..colorsValue = blueColor.colorsValue,
-    CategoryModelIsar()
-      ..transactionType = "Bonus"
-      ..isIncome = true
-      ..colorsValue = redColor.colorsValue,
-    CategoryModelIsar()
-      ..transactionType = "Wages"
-      ..isIncome = true
-      ..colorsValue = greenColor.colorsValue,
-    CategoryModelIsar()
-      ..transactionType = "Gifts"
-      ..isIncome = true
-      ..colorsValue = purpleColor.colorsValue,
+  final defaultCategoryItems = [
+    CategoryModelDriftCompanion.insert(
+      categoryModel: Value.absentIfNull(
+        CategoryModel(
+          transactionType: "Clothing",
+          isIncome: false,
+          colorsValue: purpleColor.colorsValue,
+        ),
+      ),
+    ),
+    CategoryModelDriftCompanion.insert(
+      categoryModel: Value.absentIfNull(
+        CategoryModel(
+          transactionType: "Entertainment",
+          isIncome: false,
+          colorsValue: redColor.colorsValue,
+        ),
+      ),
+    ),
+    CategoryModelDriftCompanion.insert(
+      categoryModel: Value.absentIfNull(
+        CategoryModel(
+          transactionType: "Health",
+          isIncome: false,
+          colorsValue: blueColor.colorsValue,
+        ),
+      ),
+    ),
+    CategoryModelDriftCompanion.insert(
+      categoryModel: Value.absentIfNull(
+        CategoryModel(
+          transactionType: "Fuel",
+          isIncome: false,
+          colorsValue: yellowColor.colorsValue,
+        ),
+      ),
+    ),
+    CategoryModelDriftCompanion.insert(
+      categoryModel: Value.absentIfNull(
+        CategoryModel(
+          transactionType: "Food",
+          isIncome: false,
+          colorsValue: greenColor.colorsValue,
+        ),
+      ),
+    ),
+    CategoryModelDriftCompanion.insert(
+      categoryModel: Value.absentIfNull(
+        CategoryModel(
+          transactionType: "Salary",
+          isIncome: true,
+          colorsValue: blueColor.colorsValue,
+        ),
+      ),
+    ),
+    CategoryModelDriftCompanion.insert(
+      categoryModel: Value.absentIfNull(
+        CategoryModel(
+          transactionType: "Bonus",
+          isIncome: true,
+          colorsValue: redColor.colorsValue,
+        ),
+      ),
+    ),
+    CategoryModelDriftCompanion.insert(
+      categoryModel: Value.absentIfNull(
+        CategoryModel(
+          transactionType: "Wages",
+          isIncome: true,
+          colorsValue: greenColor.colorsValue,
+        ),
+      ),
+    ),
+    CategoryModelDriftCompanion.insert(
+      categoryModel: Value.absentIfNull(
+        CategoryModel(
+          transactionType: "Gifts",
+          isIncome: true,
+          colorsValue: purpleColor.colorsValue,
+        ),
+      ),
+    ),
   ];
+
+  // final defaultListItems = [
+  //   CategoryModelIsar()
+  //     ..transactionType = "Clothing"
+  //     ..isIncome = false
+  //     ..colorsValue = purpleColor.colorsValue,
+  //   CategoryModelIsar()
+  //     ..transactionType = "Entertainment"
+  //     ..isIncome = false
+  //     ..colorsValue = redColor.colorsValue,
+  //   CategoryModelIsar()
+  //     ..transactionType = "Health"
+  //     ..isIncome = false
+  //     ..colorsValue = blueColor.colorsValue,
+  //   CategoryModelIsar()
+  //     ..transactionType = "Fuel"
+  //     ..isIncome = false
+  //     ..colorsValue = yellowColor.colorsValue,
+  //   CategoryModelIsar()
+  //     ..transactionType = "Food"
+  //     ..isIncome = false
+  //     ..colorsValue = greenColor.colorsValue,
+  //   CategoryModelIsar()
+  //     ..transactionType = "Salary"
+  //     ..isIncome = true
+  //     ..colorsValue = blueColor.colorsValue,
+  //   CategoryModelIsar()
+  //     ..transactionType = "Bonus"
+  //     ..isIncome = true
+  //     ..colorsValue = redColor.colorsValue,
+  //   CategoryModelIsar()
+  //     ..transactionType = "Wages"
+  //     ..isIncome = true
+  //     ..colorsValue = greenColor.colorsValue,
+  //   CategoryModelIsar()
+  //     ..transactionType = "Gifts"
+  //     ..isIncome = true
+  //     ..colorsValue = purpleColor.colorsValue,
+  // ];
 }

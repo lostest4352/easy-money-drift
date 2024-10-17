@@ -134,6 +134,7 @@ class AppDatabase extends _$AppDatabase {
     // returns only the transactionqueries that doesnt have the selected category model
     final ifNotExist = notExistsQuery(select(transactionModelDrift)
       ..where((row) => row.categoryModel.equalsValue(categoryModel)));
+
     // delete only the category models that doesnt exist on transaction table
     final deleteEntry = (delete(categoryModelDrift)
           ..where((tbl) =>
@@ -142,6 +143,14 @@ class AppDatabase extends _$AppDatabase {
     final intValue = await deleteEntry;
     debugPrint(intValue.toString());
     return deleteEntry;
+  }
+
+  Future<void> addDefaultItems(
+      List<CategoryModelDriftCompanion>
+          listOfCategoryModelDriftCompanion) async {
+    await (batch((batch) {
+      batch.insertAll(categoryModelDrift, listOfCategoryModelDriftCompanion);
+    }));
   }
 
   // TODO may do delete all

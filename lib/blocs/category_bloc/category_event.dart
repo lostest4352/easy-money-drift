@@ -6,31 +6,21 @@ sealed class CategoryEvent {}
 final class CategoryInitialEvent extends CategoryEvent {}
 
 final class CategoryAddEvent extends CategoryEvent {
-  final CategoryModelDrift categoryModelIsars;
+  final CategoryModelDriftCompanion categoryModelDriftCompanion;
 
-  CategoryAddEvent({required this.categoryModelIsars});
+  CategoryAddEvent({required this.categoryModelDriftCompanion});
 }
 
 final class CategoryEditEvent extends CategoryEvent {
-  final CategoryModelIsar selectedCategoryModelIsar;
-  final int selectedCategoryModelId;
-  final String transactionType;
-  final bool isIncome;
-  final int colorsValue;
+  final CategoryModelDriftData categoryModelDriftData;
 
-  CategoryEditEvent({
-    required this.selectedCategoryModelIsar,
-    required this.selectedCategoryModelId,
-    required this.transactionType,
-    required this.isIncome,
-    required this.colorsValue,
-  });
+  CategoryEditEvent({required this.categoryModelDriftData});
 }
 
 final class CategoryDeleteEvent extends CategoryEvent {
-  final CategoryModelIsar selectedCategoryModelIsar;
+  final CategoryModel categoryModel;
 
-  CategoryDeleteEvent({required this.selectedCategoryModelIsar});
+  CategoryDeleteEvent({required this.categoryModel});
 }
 
 final class CategoryAddDefaultItemsEvent extends CategoryEvent {}
