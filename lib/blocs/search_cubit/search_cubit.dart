@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_expense_tracker/database/drift_database.dart';
-import 'package:flutter_expense_tracker/database/isar_classes.dart';
-import 'package:flutter_expense_tracker/database/isar_service.dart';
 
 part 'search_state.dart';
 
@@ -14,11 +12,17 @@ class SearchCubit extends Cubit<SearchState> {
 
   void searchClicked(String searchPattern) {
     _streamSubscription?.cancel(); // Remove later if issues occur
-    _streamSubscription = isarService
-        .listenTransactionSearchItem(searchPattern: searchPattern)
-        .listen((listOfTransactions) {
-      emit(SearchLoadedState(listOfTransactionData: listOfTransactions));
-    });
+    // _streamSubscription = isarService
+    //     .listenTransactionSearchItem(searchPattern: searchPattern)
+    //     .listen((listOfTransactions) {
+    //   emit(SearchLoadedState(listOfTransactionData: listOfTransactions));
+    // });
+    _streamSubscription =
+        appDatabase.getTransactionDataSearchItem(keyword: searchPattern).listen(
+      (listOfTransactions) {
+        emit(SearchLoadedState(listOfTransactionData: listOfTransactions));
+      },
+    );
   }
 
   @override

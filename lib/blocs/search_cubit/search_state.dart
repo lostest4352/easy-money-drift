@@ -7,7 +7,7 @@ sealed class SearchState {
 final class SearchInitial extends SearchState {}
 
 final class SearchLoadedState extends SearchState {
-  final List<TransactionModelIsar>? listOfTransactionData;
+  final List<TransactionModelDriftData>? listOfTransactionData;
 
   const SearchLoadedState({required this.listOfTransactionData});
 }
