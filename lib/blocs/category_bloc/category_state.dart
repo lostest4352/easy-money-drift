@@ -19,7 +19,7 @@ final class CategoryState with EquatableMixin {
     SnackBarStatus? snackBarStatus,
   }) {
     return CategoryState(
-      listOfCategoryData: listOfCategoryData,
+      listOfCategoryData: listOfCategoryData ?? this.listOfCategoryData,
       snackBarStatus: snackBarStatus ?? this.snackBarStatus,
     );
   }

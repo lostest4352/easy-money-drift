@@ -33,13 +33,28 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     });
 
     on<CategoryEditEvent>((event, emit) async {
-      appDatabase.editCategory(
+      final result = await appDatabase.editCategory(
           oldCategoryModel: event.oldCategoryModel,
           newCategoryModel: event.newCategoryModel);
+
+      // Show snackbar
+      if (result == 0) {
+        emit(state.copyWith(snackBarStatus: SnackBarStatus.isShown));
+        // debugPrint("this here: ${state.snackBarStatus.toString()}");
+        // debugPrint("here is list of data ${state.listOfCategoryData}");
+      } else {
+        emit(state.copyWith(snackBarStatus: SnackBarStatus.isNotShown));
+        // debugPrint("this here: ${state.snackBarStatus.toString()}");
+      }
     });
 
     on<CategoryDeleteEvent>((event, emit) async {
-      appDatabase.deleteCategory(event.categoryModel);
+      final result = appDatabase.deleteCategory(event.categoryModel);
+      if (await result == 0) {
+        emit(state.copyWith(snackBarStatus: SnackBarStatus.isShown));
+      } else {
+        emit(state.copyWith(snackBarStatus: SnackBarStatus.isNotShown));
+      }
     });
 
     on<CategoryAddDefaultItemsEvent>((event, emit) async {

@@ -42,9 +42,6 @@ class _EntryDialogState extends State<EntryDialog> {
   final String currentDateFormatted =
       DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-  // String? transactionType;
-  // bool? isIncome;
-  // int? colorsValue;
   CategoryModel? categoryModel;
 
   @override
@@ -56,10 +53,6 @@ class _EntryDialogState extends State<EntryDialog> {
       selectedDate = DateTime.parse(widget.transaction!.dateAndTime);
       //
       categoryModel = widget.transaction!.categoryModel;
-
-      // transactionType = widget.transaction?.transactionType ?? "";
-      // isIncome = widget.transaction?.isIncome ?? true;
-      // colorsValue = widget.transaction?.colorsValue;
     }
   }
 
