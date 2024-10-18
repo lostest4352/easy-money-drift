@@ -40,16 +40,14 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       // Show snackbar
       if (result == 0) {
         emit(state.copyWith(snackBarStatus: SnackBarStatus.isShown));
-        // debugPrint("this here: ${state.snackBarStatus.toString()}");
-        // debugPrint("here is list of data ${state.listOfCategoryData}");
       } else {
         emit(state.copyWith(snackBarStatus: SnackBarStatus.isNotShown));
-        // debugPrint("this here: ${state.snackBarStatus.toString()}");
       }
     });
 
     on<CategoryDeleteEvent>((event, emit) async {
       final result = appDatabase.deleteCategory(event.categoryModel);
+      // show snackbar
       if (await result == 0) {
         emit(state.copyWith(snackBarStatus: SnackBarStatus.isShown));
       } else {
