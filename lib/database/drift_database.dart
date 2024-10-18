@@ -110,21 +110,23 @@ class AppDatabase extends _$AppDatabase {
   }
 
   // TODO
-  Future<int> editCategory(CategoryModel categoryModel) async {
+  Future<int> editCategory(
+      {required CategoryModel oldCategoryModel,
+      required CategoryModel newCategoryModel}) async {
     //
     // returns only the transactionqueries that doesnt have the selected category model
     final ifNotExist = notExistsQuery(select(transactionModelDrift)
-      ..where((row) => row.categoryModel.equalsValue(categoryModel)));
+      ..where((row) => row.categoryModel.equalsValue(oldCategoryModel)));
 
     final editValue = (update(categoryModelDrift)
-          ..where((val) {
+          ..where((tbl) {
             // TODO here
-            debugPrint(val.categoryModel.toString());
-            debugPrint(categoryModel.toString());
-            return ifNotExist & val.categoryModel.equalsValue(categoryModel);
+            debugPrint(tbl.categoryModel.toString());
+            debugPrint(oldCategoryModel.toString());
+            return ifNotExist & tbl.categoryModel.equalsValue(oldCategoryModel);
           }))
-        .write(
-            CategoryModelDriftCompanion(categoryModel: Value(categoryModel)));
+        .write(CategoryModelDriftCompanion(
+            categoryModel: Value(newCategoryModel)));
 
     // TODO
     final editval = await editValue;
@@ -132,7 +134,7 @@ class AppDatabase extends _$AppDatabase {
     return editValue;
   }
 
-  // TODO
+  //
   Future<int> deleteCategory(CategoryModel categoryModel) async {
     //
     // returns only the transactionqueries that doesnt have the selected category model

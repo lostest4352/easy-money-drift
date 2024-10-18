@@ -33,7 +33,9 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     });
 
     on<CategoryEditEvent>((event, emit) async {
-      appDatabase.editCategory(event.categoryModel);
+      appDatabase.editCategory(
+          oldCategoryModel: event.oldCategoryModel,
+          newCategoryModel: event.newCategoryModel);
     });
 
     on<CategoryDeleteEvent>((event, emit) async {

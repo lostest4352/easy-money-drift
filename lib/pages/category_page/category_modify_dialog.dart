@@ -29,12 +29,17 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
 
   @override
   void initState() {
-    categoryController.text =
-        widget.selectedListItem?.categoryModel.transactionType ?? "";
-    isIncome.value = widget.selectedListItem?.categoryModel.isIncome ?? true;
-    colorsValue =
-        widget.selectedListItem?.categoryModel.colorsValue ?? Colors.red.value;
     super.initState();
+    final selectedListItems = widget.selectedListItem;
+    if (selectedListItems != null) {
+      categoryController.text = selectedListItems.categoryModel.transactionType;
+      isIncome.value = selectedListItems.categoryModel.isIncome;
+      colorsValue = selectedListItems.categoryModel.colorsValue;
+    } else {
+      categoryController.text = "";
+      isIncome.value = true;
+      colorsValue = Colors.red.value;
+    }
   }
 
   @override
@@ -208,7 +213,7 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                               backgroundColor: Colors.blue,
                             ),
                             onPressed: () {
-                              if (categoryController.text != "") {
+                              if (categoryController.text.isNotEmpty) {
                                 // TODO
                                 final model = CategoryModel(
                                     transactionType: categoryController.text,
@@ -226,13 +231,22 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                                   context.pop();
                                 } else if (widget.editMode == true) {
                                   // TODO
-                                  final model = CategoryModel(
+                                  //old model
+                                  final oldModel =
+                                      widget.selectedListItem?.categoryModel;
+
+                                  // new model
+                                  final newModel = CategoryModel(
                                       transactionType: categoryController.text,
                                       isIncome: isIncome.value ?? true,
                                       colorsValue: colorsValue);
 
-                                  blocCategories.add(
-                                      CategoryEditEvent(categoryModel: model));
+                                  if (oldModel != null) {
+                                    blocCategories.add(CategoryEditEvent(
+                                        oldCategoryModel: oldModel,
+                                        newCategoryModel: newModel));
+                                  }
+
                                   context.pop();
                                 }
                               }
