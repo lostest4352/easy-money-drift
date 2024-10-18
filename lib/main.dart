@@ -11,6 +11,7 @@ import 'package:flutter_expense_tracker/database/drift_database.dart';
 import 'package:flutter_expense_tracker/routes/app_routes.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 
 void main() async {
   if (Platform.isAndroid) {
@@ -22,8 +23,13 @@ void main() async {
     );
   }
   WidgetsFlutterBinding.ensureInitialized();
-  HydratedBloc.storage = await HydratedStorage.build(
-      storageDirectory: await getApplicationDocumentsDirectory());
+  // hydrated bloc settings stored in same path as drift db
+  final docDir = await getApplicationDocumentsDirectory();
+  final dbFolder = Directory(p.join(docDir.path, 'appdb'));
+  await dbFolder.create(recursive: true);
+  HydratedBloc.storage =
+      await HydratedStorage.build(storageDirectory: dbFolder);
+  //
   runApp(const MyApp());
 }
 
