@@ -40,6 +40,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       // Show snackbar
       if (result == 0) {
         emit(state.copyWith(snackBarStatus: SnackBarStatus.isShown));
+        await (Future.delayed(Duration.zero));
+        emit(state.copyWith(snackBarStatus: SnackBarStatus.isNotShown));
       } else {
         emit(state.copyWith(snackBarStatus: SnackBarStatus.isNotShown));
       }
@@ -50,6 +52,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       // show snackbar
       if (await result == 0) {
         emit(state.copyWith(snackBarStatus: SnackBarStatus.isShown));
+        await (Future.delayed(Duration.zero));
+        emit(state.copyWith(snackBarStatus: SnackBarStatus.isNotShown));
       } else {
         emit(state.copyWith(snackBarStatus: SnackBarStatus.isNotShown));
       }

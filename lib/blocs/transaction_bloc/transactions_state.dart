@@ -11,11 +11,6 @@ final class TransactionsLoadedState extends TransactionsState
 
   TransactionsLoadedState({required this.listOfTransactionData});
 
-  maj() {
-    TransactionModelDrift val = TransactionModelDrift();
-    val.categoryModel;
-  }
-
   @override
   List<Object?> get props => [listOfTransactionData];
 }
