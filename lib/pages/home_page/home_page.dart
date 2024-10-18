@@ -195,8 +195,8 @@ class _HomePageState extends State<HomePage> {
                 //
                 final transactionsList = state.listOfTransactionData;
 
-                // transactionsList
-                //     ?.sort((a, b) => b.dateAndTime.compareTo(a.dateAndTime));
+                transactionsList
+                    ?.sort((a, b) => b.dateAndTime.compareTo(a.dateAndTime));
 
                 // Code for sorting ascending/descending
                 // snapshot.data!.sort((a, b) => a.dateTime.compareTo(b.dateTime));
@@ -305,21 +305,24 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                       child: Row(
                                                         children: [
-                                                          () {
-                                                            if (dayEntry.key ==
-                                                                DateTime.now()
-                                                                    .formatDay()
-                                                                    .toString()) {
-                                                              return const Text(
-                                                                'Today',
-                                                              );
-                                                            } else {
-                                                              // Key is day here
-                                                              return Text(
-                                                                dayEntry.key,
-                                                              );
-                                                            }
-                                                          }(),
+                                                          Builder(
+                                                            builder: (context) {
+                                                              if (dayEntry
+                                                                      .key ==
+                                                                  DateTime.now()
+                                                                      .formatDay()
+                                                                      .toString()) {
+                                                                return const Text(
+                                                                  'Today',
+                                                                );
+                                                              } else {
+                                                                // Key is day here
+                                                                return Text(
+                                                                  dayEntry.key,
+                                                                );
+                                                              }
+                                                            },
+                                                          ),
                                                           const Spacer(),
                                                           Text(
                                                             "Total: ${calculatedDayData.totalValue}",
