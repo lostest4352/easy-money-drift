@@ -233,123 +233,134 @@ class _HomePageState extends State<HomePage> {
                               groupByMonth.keys.toList()[index];
                           return Column(
                             children: [
-                              () {
-                                final calculatedMonthData = calculateTotalValue(
-                                  monthEntryValue,
-                                );
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(12, 8, 12, 8),
-                                  child: Column(
+                              Builder(
+                                builder: (context) {
+                                  final calculatedMonthData =
+                                      calculateTotalValue(
+                                    monthEntryValue,
+                                  );
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          // key is month name
+                                          monthEntryKey,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Balance: Rs. ${calculatedMonthData.totalValue}",
+                                          style: TextStyle(
+                                            color: () {
+                                              if (calculatedMonthData
+                                                      .totalValue >
+                                                  0) {
+                                                return Colors.green;
+                                              } else {
+                                                return Colors.red;
+                                              }
+                                            }(),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                              Builder(
+                                builder: (context) {
+                                  final groupByDay =
+                                      // Value is List<TransactionModelIsar> per month
+                                      groupBy(monthEntryValue, (obj) {
+                                    final objectDateTime =
+                                        DateTime.parse(obj.dateAndTime)
+                                            .formatDay();
+                                    return objectDateTime;
+                                  });
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        // key is month name
-                                        monthEntryKey,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        "Balance: Rs. ${calculatedMonthData.totalValue}",
-                                        style: TextStyle(
-                                          color: () {
-                                            if (calculatedMonthData.totalValue >
-                                                0) {
-                                              return Colors.green;
-                                            } else {
-                                              return Colors.red;
-                                            }
-                                          }(),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                );
-                              }(),
-                              () {
-                                final groupByDay =
-                                    // Value is List<TransactionModelIsar> per month
-                                    groupBy(monthEntryValue, (obj) {
-                                  final objectDateTime =
-                                      DateTime.parse(obj.dateAndTime)
-                                          .formatDay();
-                                  return objectDateTime;
-                                });
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    for (final dayEntry in groupByDay.entries)
-                                      Column(
-                                        children: [
-                                          () {
-                                            final calculatedDayData =
-                                                calculateTotalValue(
-                                              dayEntry.value,
-                                            );
-                                            return Column(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                    left: 17,
-                                                    right: 17,
-                                                    top: 4,
-                                                    bottom: 4,
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      () {
-                                                        if (dayEntry.key ==
-                                                            DateTime.now()
-                                                                .formatDay()
-                                                                .toString()) {
-                                                          return const Text(
-                                                            'Today',
-                                                          );
-                                                        } else {
-                                                          // Key is day here
-                                                          return Text(
-                                                            dayEntry.key,
-                                                          );
-                                                        }
-                                                      }(),
-                                                      const Spacer(),
-                                                      Text(
-                                                        "Total: ${calculatedDayData.totalValue}",
-                                                        style: TextStyle(
-                                                          color: () {
-                                                            if (calculatedDayData
-                                                                    .totalValue >
-                                                                0) {
-                                                              return Colors
-                                                                  .green;
+                                      for (final dayEntry in groupByDay.entries)
+                                        Column(
+                                          children: [
+                                            Builder(
+                                              builder: (context) {
+                                                final calculatedDayData =
+                                                    calculateTotalValue(
+                                                  dayEntry.value,
+                                                );
+                                                return Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                        left: 17,
+                                                        right: 17,
+                                                        top: 4,
+                                                        bottom: 4,
+                                                      ),
+                                                      child: Row(
+                                                        children: [
+                                                          () {
+                                                            if (dayEntry.key ==
+                                                                DateTime.now()
+                                                                    .formatDay()
+                                                                    .toString()) {
+                                                              return const Text(
+                                                                'Today',
+                                                              );
                                                             } else {
-                                                              return Colors.red;
+                                                              // Key is day here
+                                                              return Text(
+                                                                dayEntry.key,
+                                                              );
                                                             }
                                                           }(),
-                                                        ),
+                                                          const Spacer(),
+                                                          Text(
+                                                            "Total: ${calculatedDayData.totalValue}",
+                                                            style: TextStyle(
+                                                              color: () {
+                                                                if (calculatedDayData
+                                                                        .totalValue >
+                                                                    0) {
+                                                                  return Colors
+                                                                      .green;
+                                                                } else {
+                                                                  return Colors
+                                                                      .red;
+                                                                }
+                                                              }(),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                // Value is TransactionModelIsar list item
-                                                for (final listItem
-                                                    in dayEntry.value)
-                                                  Column(
-                                                    children: [
-                                                      TransactionView(
-                                                        transaction: listItem,
+                                                    ),
+                                                    // Value is TransactionModelDriftData list item
+                                                    for (final listItem
+                                                        in dayEntry.value)
+                                                      Column(
+                                                        children: [
+                                                          TransactionView(
+                                                            transaction:
+                                                                listItem,
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
-                                                  ),
-                                              ],
-                                            );
-                                          }(),
-                                        ],
-                                      ),
-                                  ],
-                                );
-                              }(),
+                                                  ],
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                    ],
+                                  );
+                                },
+                              ),
                               const Divider(
                                 height: 5,
                               )

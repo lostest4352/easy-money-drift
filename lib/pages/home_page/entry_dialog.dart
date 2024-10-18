@@ -91,30 +91,32 @@ class _EntryDialogState extends State<EntryDialog> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  () {
-                    if (widget.editMode == true) {
-                      return Align(
-                        alignment: Alignment.topRight,
-                        child: InkWell(
-                          onTap: () {
-                            blocTransaction.add(
-                              TransactionsDeleteEvent(
-                                transactionModelId: widget.transaction!.id,
-                              ),
-                            );
-                            context.pop();
-                          },
-                          child: const Icon(
-                            Icons.delete_outline,
-                            size: 20,
-                            color: Colors.grey,
+                  Builder(
+                    builder: (context) {
+                      if (widget.editMode == true) {
+                        return Align(
+                          alignment: Alignment.topRight,
+                          child: InkWell(
+                            onTap: () {
+                              blocTransaction.add(
+                                TransactionsDeleteEvent(
+                                  transactionModelId: widget.transaction!.id,
+                                ),
+                              );
+                              context.pop();
+                            },
+                            child: const Icon(
+                              Icons.delete_outline,
+                              size: 20,
+                              color: Colors.grey,
+                            ),
                           ),
-                        ),
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  }(),
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    },
+                  ),
                   const SizedBox(
                     height: 15,
                   ),
@@ -291,7 +293,7 @@ class _EntryDialogState extends State<EntryDialog> {
                                                   });
                                                   context.pop();
                                                 },
-                                                // TODO null
+
                                                 leading: CircleAvatar(
                                                   backgroundColor:
                                                       (categoryList[index]

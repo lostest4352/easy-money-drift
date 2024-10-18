@@ -7,7 +7,6 @@ import 'package:drift/native.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_expense_tracker/database/categories_type_converter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:drift/extensions/json1.dart';
 
 part 'drift_database.g.dart';
 
@@ -109,7 +108,7 @@ class AppDatabase extends _$AppDatabase {
     return addEntry;
   }
 
-  // TODO
+  // get old value to identify where to edit
   Future<int> editCategory(
       {required CategoryModel oldCategoryModel,
       required CategoryModel newCategoryModel}) async {
@@ -120,15 +119,12 @@ class AppDatabase extends _$AppDatabase {
 
     final editValue = (update(categoryModelDrift)
           ..where((tbl) {
-            // TODO here
-            debugPrint(tbl.categoryModel.toString());
-            debugPrint(oldCategoryModel.toString());
             return ifNotExist & tbl.categoryModel.equalsValue(oldCategoryModel);
           }))
         .write(CategoryModelDriftCompanion(
             categoryModel: Value(newCategoryModel)));
 
-    // TODO
+    // print 1 or 0
     final editval = await editValue;
     debugPrint(editval.toString());
     return editValue;
@@ -147,6 +143,7 @@ class AppDatabase extends _$AppDatabase {
               ifNotExist & tbl.categoryModel.equalsValue(categoryModel)))
         .go();
     final intValue = await deleteEntry;
+    // print 1 or 0
     debugPrint(intValue.toString());
     return deleteEntry;
   }

@@ -134,79 +134,80 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                       padding: const EdgeInsets.only(left: 30, right: 30),
                       child: Row(
                         children: [
-                          () {
-                            if (widget.editMode == true) {
-                              return ElevatedButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        actions: [
-                                          const Wrap(
-                                            children: [
-                                              Text(
-                                                "Are you sure that you want to delete this category?",
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  final event = widget
-                                                      .selectedListItem
-                                                      ?.categoryModel;
-                                                  if (event != null) {
-                                                    blocCategories.add(
-                                                      // TODO
-                                                      CategoryDeleteEvent(
-                                                        categoryModel: event,
-                                                      ),
-                                                    );
-                                                  }
-
-                                                  context.pop();
-                                                  context.pop();
-                                                },
-                                                child: const Text(
-                                                  "Ok",
-                                                  style: TextStyle(
-                                                      color: Colors.blue),
+                          Builder(
+                            builder: (context) {
+                              if (widget.editMode == true) {
+                                return ElevatedButton(
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          actions: [
+                                            const Wrap(
+                                              children: [
+                                                Text(
+                                                  "Are you sure that you want to delete this category?",
                                                 ),
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  context.pop();
-                                                },
-                                                child: const Text(
-                                                  "Cancel",
-                                                  style: TextStyle(
-                                                    color: Colors.red,
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    final model = widget
+                                                        .selectedListItem
+                                                        ?.categoryModel;
+                                                    if (model != null) {
+                                                      blocCategories.add(
+                                                        CategoryDeleteEvent(
+                                                          categoryModel: model,
+                                                        ),
+                                                      );
+                                                    }
+
+                                                    context.pop();
+                                                    context.pop();
+                                                  },
+                                                  child: const Text(
+                                                    "Ok",
+                                                    style: TextStyle(
+                                                        color: Colors.blue),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                child: const Text("Delete"),
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
-                          }(),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    context.pop();
+                                                  },
+                                                  child: const Text(
+                                                    "Cancel",
+                                                    style: TextStyle(
+                                                      color: Colors.red,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: const Text("Delete"),
+                                );
+                              } else {
+                                return const SizedBox();
+                              }
+                            },
+                          ),
                           const Spacer(),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -214,7 +215,7 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                             ),
                             onPressed: () {
                               if (categoryController.text.isNotEmpty) {
-                                // TODO
+                                //
                                 final model = CategoryModel(
                                     transactionType: categoryController.text,
                                     isIncome: isIncome.value ?? true,
@@ -230,7 +231,7 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                                   );
                                   context.pop();
                                 } else if (widget.editMode == true) {
-                                  // TODO
+                                  //
                                   //old model
                                   final oldModel =
                                       widget.selectedListItem?.categoryModel;
