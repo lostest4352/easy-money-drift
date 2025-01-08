@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +11,7 @@ import 'package:flutter_expense_tracker/pages/main_page.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 void main() async {
   if (Platform.isAndroid) {
@@ -73,14 +73,17 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: SafeArea(
-          child: MaterialApp(
+          child: ShadApp.material(
             debugShowCheckedModeBanner: false,
-            theme: FlexThemeData.dark(
-              useMaterial3: false,
-              scheme: FlexScheme.mandyRed,
-              colorScheme: const ColorScheme.dark(primary: Colors.red),
-              appBarBackground: (Colors.grey[850]),
-              // dialogBackground: (Colors.grey[850]),
+            darkTheme: ShadThemeData(
+              brightness: Brightness.dark,
+              colorScheme: ShadSlateColorScheme.dark(
+                background: const Color.fromARGB(31, 26, 26, 26),
+              ),
+              primaryDialogTheme:
+                  ShadDialogTheme(backgroundColor: Colors.grey.shade900),
+              alertDialogTheme:
+                  ShadDialogTheme(backgroundColor: Colors.grey.shade900),
             ),
             home: const MainPage(),
           ),

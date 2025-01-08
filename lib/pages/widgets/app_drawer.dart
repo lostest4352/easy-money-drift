@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker/pages/category_page/expense_categories.dart';
-import 'package:flutter_expense_tracker/pages/home_page/home_page.dart';
+import 'package:flutter_expense_tracker/pages/main_page.dart';
 import 'package:flutter_expense_tracker/pages/settings_page/settings_page.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -47,7 +47,7 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
-                  return const HomePage();
+                  return const MainPage();
                 },
               ));
             },
