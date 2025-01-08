@@ -38,6 +38,7 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
     } else {
       categoryController.text = "";
       isIncome.value = true;
+      // ignore: deprecated_member_use
       colorsValue.value = Colors.red.value;
     }
   }
@@ -122,6 +123,7 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                                 ),
                             ],
                             onChanged: (value) {
+                              // ignore: deprecated_member_use
                               colorsValue.value = value ?? Colors.red.value;
                             },
                           ),
