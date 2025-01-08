@@ -1,8 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker/routes/app_routes.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_expense_tracker/pages/category_page/expense_categories.dart';
+import 'package:flutter_expense_tracker/pages/home_page/home_page.dart';
+import 'package:flutter_expense_tracker/pages/settings_page/settings_page.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -44,7 +45,11 @@ class AppDrawer extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              context.goNamed(AppRoutes.homePage.name);
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return const HomePage();
+                },
+              ));
             },
             leading: const Icon(Icons.account_balance_outlined),
             title: const Text(
@@ -53,7 +58,11 @@ class AppDrawer extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              context.goNamed(AppRoutes.expenseCategoriesPage.name);
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return const ExpenseCategories();
+                },
+              ));
             },
             leading: const Icon(Icons.label),
             title: const Text(
@@ -62,7 +71,11 @@ class AppDrawer extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              context.goNamed(AppRoutes.settingsPage.name);
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return const SettingsPage();
+                },
+              ));
             },
             leading: const Icon(Icons.settings),
             title: const Text(

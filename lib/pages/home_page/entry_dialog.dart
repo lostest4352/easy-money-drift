@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expense_tracker/blocs/category_bloc/category_bloc.dart';
 import 'package:flutter_expense_tracker/database/drift_database.dart';
 import 'package:flutter_expense_tracker/models/category_model.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_expense_tracker/blocs/transaction_bloc/transactions_bloc.dart';
@@ -96,7 +95,7 @@ class _EntryDialogState extends State<EntryDialog> {
                                   transactionModelId: widget.transaction!.id,
                                 ),
                               );
-                              context.pop();
+                              Navigator.pop(context);
                             },
                             child: const Icon(
                               Icons.delete_outline,
@@ -137,7 +136,7 @@ class _EntryDialogState extends State<EntryDialog> {
                                       setState(() {
                                         selectedDate = selectedDay;
                                       });
-                                      context.pop();
+                                      Navigator.pop(context);
                                     },
                                     selectedDayPredicate: (day) {
                                       return isSameDay(selectedDate, day);
@@ -184,7 +183,7 @@ class _EntryDialogState extends State<EntryDialog> {
                         padding: const EdgeInsets.only(left: 10, bottom: 10),
                         child: InkWell(
                           onTap: () {
-                            context.pop();
+                            Navigator.pop(context);
                           },
                           child: Text(
                             "Cancel",
@@ -234,7 +233,7 @@ class _EntryDialogState extends State<EntryDialog> {
                                     transactionModelData: model));
                               }
                             }
-                            context.pop();
+                            Navigator.pop(context);
                           },
                           child: Text(
                             "Save",
@@ -284,7 +283,7 @@ class _EntryDialogState extends State<EntryDialog> {
                                                         categoryList[index]
                                                             .categoryModel;
                                                   });
-                                                  context.pop();
+                                                  Navigator.pop(context);
                                                 },
 
                                                 leading: CircleAvatar(

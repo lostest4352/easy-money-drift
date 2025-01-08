@@ -8,7 +8,8 @@ import 'package:flutter_expense_tracker/blocs/search_cubit/search_cubit.dart';
 import 'package:flutter_expense_tracker/blocs/time_range_cubit/time_range_cubit.dart';
 import 'package:flutter_expense_tracker/blocs/transaction_bloc/transactions_bloc.dart';
 import 'package:flutter_expense_tracker/database/drift_database.dart';
-import 'package:flutter_expense_tracker/routes/app_routes.dart';
+import 'package:flutter_expense_tracker/pages/home_page/home_page.dart';
+import 'package:flutter_expense_tracker/pages/main_page.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -73,7 +74,7 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: SafeArea(
-          child: MaterialApp.router(
+          child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: FlexThemeData.dark(
               useMaterial3: false,
@@ -82,8 +83,7 @@ class MyApp extends StatelessWidget {
               appBarBackground: (Colors.grey[850]),
               // dialogBackground: (Colors.grey[850]),
             ),
-            // home: const HomePage(),
-            routerConfig: goRouter,
+            home: const MainPage(),
           ),
         ),
       ),

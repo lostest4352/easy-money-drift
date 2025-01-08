@@ -7,7 +7,6 @@ import 'package:flutter_expense_tracker/global_variables/dropdown_colors.dart';
 import 'package:flutter_expense_tracker/blocs/category_bloc/category_bloc.dart';
 import 'package:flutter_expense_tracker/models/category_model.dart';
 import 'package:flutter_expense_tracker/pages/widgets/popup_textfield_items.dart';
-import 'package:go_router/go_router.dart';
 
 class CategoryModifyDialog extends StatefulWidget {
   final bool editMode;
@@ -175,9 +174,9 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                                                             ),
                                                           );
                                                         }
+                                                        Navigator.pop(context);
 
-                                                        context.pop();
-                                                        context.pop();
+                                                        Navigator.pop(context);
                                                       },
                                                       child: const Text(
                                                         "Ok",
@@ -190,7 +189,7 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                                                     ),
                                                     TextButton(
                                                       onPressed: () {
-                                                        context.pop();
+                                                        Navigator.pop(context);
                                                       },
                                                       child: const Text(
                                                         "Cancel",
@@ -236,7 +235,7 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                                             categoryModelDriftCompanion:
                                                 driftCompanion),
                                       );
-                                      context.pop();
+                                      Navigator.pop(context);
                                     } else if (widget.editMode == true) {
                                       //
                                       //old model
@@ -257,7 +256,7 @@ class _CategoryModifyDialogState extends State<CategoryModifyDialog> {
                                             newCategoryModel: newModel));
                                       }
 
-                                      context.pop();
+                                      Navigator.pop(context);
                                     }
                                   }
                                 },

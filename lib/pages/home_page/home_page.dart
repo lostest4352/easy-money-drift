@@ -6,9 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expense_tracker/global_variables/time_range_global_vars.dart';
 import 'package:flutter_expense_tracker/pages/home_page/date_custom_select.dart';
 import 'package:flutter_expense_tracker/pages/home_page/date_fixed_range_select.dart';
+import 'package:flutter_expense_tracker/pages/home_page/search_page.dart';
 import 'package:flutter_expense_tracker/pages/page_functions/date_formatter.dart';
-import 'package:flutter_expense_tracker/routes/app_routes.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_expense_tracker/blocs/time_range_cubit/time_range_cubit.dart';
 import 'package:flutter_expense_tracker/blocs/transaction_bloc/transactions_bloc.dart';
 import 'package:flutter_expense_tracker/pages/home_page/entry_dialog.dart';
@@ -170,7 +169,11 @@ class _HomePageState extends State<HomePage> {
             actions: [
               IconButton(
                 onPressed: () {
-                  context.pushNamed(AppRoutes.searchPage.name);
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return const SearchPage();
+                    },
+                  ));
                 },
                 icon: const Icon(Icons.search),
               ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expense_tracker/global_variables/time_range_global_vars.dart';
-import 'package:go_router/go_router.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'package:flutter_expense_tracker/blocs/time_range_cubit/time_range_cubit.dart';
@@ -81,7 +80,7 @@ class _CustomDateDialogState extends State<CustomDateDialog> {
                                     setState(() {
                                       selectedDateForStart = selectedDay;
                                     });
-                                    context.pop();
+                                    Navigator.pop(context);
                                   },
                                   selectedDayPredicate: (day) {
                                     return isSameDay(selectedDateForStart, day);
@@ -129,7 +128,7 @@ class _CustomDateDialogState extends State<CustomDateDialog> {
                                       final currentDate = selectedDay;
                                       selectedDateForEnd = currentDate;
                                     });
-                                    context.pop();
+                                    Navigator.pop(context);
                                   },
                                   selectedDayPredicate: (day) {
                                     return isSameDay(selectedDateForEnd, day);
@@ -162,7 +161,7 @@ class _CustomDateDialogState extends State<CustomDateDialog> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      context.pop();
+                      Navigator.pop(context);
                     },
                     child: const Text("Cancel"),
                   ),
@@ -195,7 +194,7 @@ class _CustomDateDialogState extends State<CustomDateDialog> {
                           ),
                         );
                         widget.bottomOpen.value = false;
-                        context.pop();
+                        Navigator.pop(context);
                       }
                     },
                     child: const Text(
