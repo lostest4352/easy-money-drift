@@ -11,7 +11,6 @@ import 'package:flutter_expense_tracker/pages/main_page.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:shadcn_ui/shadcn_ui.dart';
 
 void main() async {
   if (Platform.isAndroid) {
@@ -73,18 +72,9 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: SafeArea(
-          child: ShadApp.material(
+          child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            darkTheme: ShadThemeData(
-              brightness: Brightness.dark,
-              colorScheme: ShadSlateColorScheme.dark(
-                background: const Color.fromARGB(31, 26, 26, 26),
-              ),
-              primaryDialogTheme:
-                  ShadDialogTheme(backgroundColor: Colors.grey.shade900),
-              alertDialogTheme:
-                  ShadDialogTheme(backgroundColor: Colors.grey.shade900),
-            ),
+            darkTheme: ThemeData.dark(),
             home: const MainPage(),
           ),
         ),
